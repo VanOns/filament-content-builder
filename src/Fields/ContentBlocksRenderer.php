@@ -9,7 +9,7 @@ class ContentBlocksRenderer extends Builder
 {
     protected function setUp(): void
     {
-        $this->blocks(FilamentContentBlocks::getBlocks())
+        $this->blocks(FilamentContentBlocks::getBuilderBlocks())
             ->collapsible()
             ->collapsed();
 

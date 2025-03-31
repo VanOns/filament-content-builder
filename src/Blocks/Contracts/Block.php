@@ -74,9 +74,4 @@ abstract class Block
             ->icon(static::icon())
             ->schema(static::schema());
     }
-
-    public static function isNestable(): bool
-    {
-        return true;
-    }
 }

@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Vendor\FilamentContentBlocks\Blocks;
+
+use Filament\Forms\Components\TextInput;
+use VanOns\FilamentContentBlocks\Blocks\Contracts\Block;
+
+class {{ class }} extends Block
+{
+    public string $text;
+
+    public static function title(): string
+    {
+        return __('{{ title }}');
+    }
+
+    public static function icon(): ?string
+    {
+        return 'heroicon-o-document-text';
+    }
+
+    public static function schema(): array
+    {
+        return [
+            TextInput::make('text')
+                ->label(__('Text')),
+        ];
+    }
+}

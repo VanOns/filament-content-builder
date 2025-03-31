@@ -8,30 +8,43 @@ use VanOns\FilamentContentBlocks\Blocks\Contracts\Block;
 class FilamentContentBlocks
 {
     /**
-     * @return array<FilamentBlock>
+     * @return array<Block>
      */
     public static function getBlocks(): array
     {
         $blocks = [];
 
-        foreach (glob(__DIR__ . '/Blocks/*.php') as $filename) {
-            $class = 'VanOns\\FilamentContentBlocks\\Blocks\\' . basename($filename, '.php');
+        foreach (config('filament-content-blocks.blocks') as $class) {
             if (is_a($class, Block::class, true)) {
-                $blocks[] = $class::builderBlock();
+                $blocks[] = $class;
             }
         }
 
         return $blocks;
     }
 
+    /**
+     * @return array<FilamentBlock>
+     */
+    public static function getBuilderBlocks(): array
+    {
+        return collect(static::getBlocks())
+            ->map(fn (Block|string $block) => $block::builderBlock())
+            ->toArray();
+    }
+
+    public static function blockExists(string $name): bool
+    {
+        return collect(static::getBlocks())
+            ->contains(fn (Block|string $block) => $block::type() === $name);
+    }
+
     public static function getBlock(string $name, array $data): ?Block
     {
-        $class = 'VanOns\\FilamentContentBlocks\\Blocks\\' . $name;
+        /** @var Block|null $class */
+        $class = collect(static::getBlocks())
+            ->first(fn (Block|string $block) => $block::type() === $name);
 
-        if (!is_a($class, Block::class, true)) {
-            return null;
-        }
-
-        return $class::make($data);
+        return $class ? $class::make($data) : null;
     }
 }

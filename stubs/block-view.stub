@@ -1,0 +1,11 @@
+@php
+    /**
+     * @var \App\Vendor\FilamentContentBlocks\Blocks\{{ class }} $block
+     */
+@endphp
+
+<section>
+    @if(!empty($text = $block->text))
+        <p>{{ $text }}</p>
+    @endif
+</section>

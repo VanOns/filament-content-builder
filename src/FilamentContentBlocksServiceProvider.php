@@ -3,13 +3,17 @@
 namespace VanOns\FilamentContentBlocks;
 
 use Illuminate\Support\ServiceProvider;
-use VanOns\FilamentContentBlocks\Console\FilamentContentBlocksCommand;
+use VanOns\FilamentContentBlocks\Console\MakeContentBlockCommand;
 
 class FilamentContentBlocksServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
-        //config
+        $this->mergeConfigFrom(
+            path: __DIR__ . '/../config/filament-content-blocks.php',
+            key: 'filament-content-blocks'
+        );
+
         $this->publishes(
             paths: [
                 __DIR__ . '/../config/filament-content-blocks.php' => config_path('filament-content-blocks.php'),
@@ -17,7 +21,6 @@ class FilamentContentBlocksServiceProvider extends ServiceProvider
             groups: 'filament-content-blocks-config'
         );
 
-        //translations
         $this->loadTranslationsFrom(
             path: __DIR__ . '/../lang',
             namespace: 'filament-content-blocks'
@@ -30,31 +33,35 @@ class FilamentContentBlocksServiceProvider extends ServiceProvider
             groups: 'filament-content-blocks-lang'
         );
 
-        //views
         $this->loadViewsFrom(
             path: __DIR__ . '/../resources/views',
             namespace: 'filament-content-blocks'
         );
 
-        //public assets
-//        $this->publishes(
-//            paths: [
-//                __DIR__ . '/../public' => public_path('vendor/courier'),
-//            ],
-//            groups: 'skeleton-public'
-//        );
+        $this->publishes(
+            paths: [
+                __DIR__ . '/../resources/views' => resource_path('views/vendor/filament-content-blocks'),
+            ],
+            groups: 'filament-content-blocks-views'
+        );
 
-        //commands
+        $this->publishes(
+            paths: [
+                __DIR__ . '/../stubs' => base_path('stubs'),
+            ],
+            groups: 'filament-content-blocks-stubs'
+        );
+
         if ($this->app->runningInConsole()) {
             $this->commands([
-                FilamentContentBlocksCommand::class,
+                MakeContentBlockCommand::class,
             ]);
         }
     }
 
-    public function register()
+    public function register(): void
     {
-        $this->app->bind('filament-content-blocks', function ($app) {
+        $this->app->bind('filament-content-blocks', function () {
             return new FilamentContentBlocks();
         });
     }
