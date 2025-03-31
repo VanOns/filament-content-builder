@@ -21,18 +21,6 @@ class FilamentContentBlocksServiceProvider extends ServiceProvider
             groups: 'filament-content-blocks-config'
         );
 
-        $this->loadTranslationsFrom(
-            path: __DIR__ . '/../lang',
-            namespace: 'filament-content-blocks'
-        );
-
-        $this->publishes(
-            paths: [
-                __DIR__ . '/../lang' => $this->app->langPath('vendor/filament-content-blocks'),
-            ],
-            groups: 'filament-content-blocks-lang'
-        );
-
         $this->loadViewsFrom(
             path: __DIR__ . '/../resources/views',
             namespace: 'filament-content-blocks'
