@@ -1,6 +1,6 @@
 {
     "name": "van-ons/filament-content-blocks",
-    "description": "A package that provides a content renderer field with a set of frequently used content blocks in Filament.",
+    "description": "A package that provides a content builder with a set of frequently used content blocks in Filament.",
     "type": "library",
     "license": "MIT",
     "autoload": {
