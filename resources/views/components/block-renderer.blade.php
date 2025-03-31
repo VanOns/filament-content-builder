@@ -8,9 +8,9 @@
 
         @php
             /**
-             * @var ?\VanOns\FilamentContentBlocks\Blocks\Contracts\Block $blockInstance
+             * @var ?\VanOns\FilamentContentBuilder\Blocks\Contracts\Block $blockInstance
              */
-            $blockInstance = \VanOns\FilamentContentBlocks\Facade\FilamentContentBlocks::getBlock($block['type'], $block['data']);
+            $blockInstance = \VanOns\FilamentContentBuilder\Facade\FilamentContentBuilder::getBlock($block['type'], $block['data']);
 
             if (!$blockInstance) {
                 continue;

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Vendor\FilamentContentBlocks\Blocks;
+namespace App\Vendor\FilamentContentBuilder\Blocks;
 
 use Filament\Forms\Components\TextInput;
-use VanOns\FilamentContentBlocks\Blocks\Contracts\Block;
+use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 class {{ class }} extends Block
 {

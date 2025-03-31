@@ -1,11 +1,11 @@
 <?php
 
-namespace VanOns\FilamentContentBlocks\Blocks;
+namespace VanOns\FilamentContentBuilder\Blocks;
 
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use VanOns\FilamentContentBlocks\Blocks\Contracts\Block;
+use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 class ListBlock extends Block
 {

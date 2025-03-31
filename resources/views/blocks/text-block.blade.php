@@ -1,6 +1,6 @@
 @php
     /**
-     * @var \VanOns\FilamentContentBlocks\Blocks\TextBlock $block
+     * @var \VanOns\FilamentContentBuilder\Blocks\TextBlock $block
      */
 @endphp
 

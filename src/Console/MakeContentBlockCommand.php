@@ -1,13 +1,13 @@
 <?php
 
-namespace VanOns\FilamentContentBlocks\Console;
+namespace VanOns\FilamentContentBuilder\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use VanOns\FilamentContentBlocks\Facade\FilamentContentBlocks;
-use VanOns\FilamentContentBlocks\Helpers\FileHelper;
+use VanOns\FilamentContentBuilder\Facade\FilamentContentBuilder;
+use VanOns\FilamentContentBuilder\Helpers\FileHelper;
 
 class MakeContentBlockCommand extends Command implements PromptsForMissingInput
 {
@@ -46,7 +46,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
         $name = Str::studly($this->argument('name'));
         $blockName = $name . 'Block';
 
-        if (FilamentContentBlocks::blockExists($blockName)) {
+        if (FilamentContentBuilder::blockExists($blockName)) {
             $this->fail('The block already exists.');
         }
 
@@ -57,7 +57,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
             title: $name,
         );
 
-        if (!File::exists(config_path('filament-content-blocks.php'))) {
+        if (!File::exists(config_path('filament-content-builder.php'))) {
             $this->publishConfigFile();
         }
 
@@ -73,7 +73,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
         $this->line('Publishing config file...');
 
         $this->callSilent('vendor:publish', [
-            '--tag' => 'filament-content-blocks-config',
+            '--tag' => 'filament-content-builder-config',
             '--force' => true,
         ]);
 
@@ -84,11 +84,11 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
     {
         $this->line('Adding block to config file...');
 
-        $blocks = config('filament-content-blocks.blocks', []);
-        $blocks[] = 'App\\Vendor\\FilamentContentBlocks\\Blocks\\' . $blockName;
+        $blocks = config('filament-content-builder.blocks', []);
+        $blocks[] = 'App\\Vendor\\FilamentContentBuilder\\Blocks\\' . $blockName;
         $blocks = collect($blocks)->map(fn ($block) => "\\$block::class")->toArray();
 
-        $configPath = config_path('filament-content-blocks.php');
+        $configPath = config_path('filament-content-builder.php');
         $configContent = File::get($configPath);
         $configContent = preg_replace(
             '/\'blocks\' => \[(.*?)\],/s',

@@ -1,6 +1,6 @@
 @php
     /**
-     * @var \App\Vendor\FilamentContentBlocks\Blocks\{{ class }} $block
+     * @var \App\Vendor\FilamentContentBuilder\Blocks\{{ class }} $block
      */
 @endphp
 

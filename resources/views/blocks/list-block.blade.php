@@ -1,6 +1,6 @@
 @php
     /**
-     * @var \VanOns\FilamentContentBlocks\Blocks\ListBlock $block
+     * @var \VanOns\FilamentContentBuilder\Blocks\ListBlock $block
      */
 
     $listEl = match ($block->type) {

@@ -1,11 +1,11 @@
 {
-    "name": "van-ons/filament-content-blocks",
+    "name": "van-ons/filament-content-builder",
     "description": "A package that provides a content builder with a set of frequently used content blocks in Filament.",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "VanOns\\FilamentContentBlocks\\": "src/"
+            "VanOns\\FilamentContentBuilder\\": "src/"
         }
     },
     "authors": [
@@ -31,11 +31,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VanOns\\FilamentContentBlocks\\FilamentContentBlocksServiceProvider"
+                "VanOns\\FilamentContentBuilder\\FilamentContentBuilderServiceProvider"
             ]
         },
         "aliases": {
-            "FilamentContentBlocks": "VanOns\\FilamentContentBlocks\\Facade\\FilamentContentBlocks"
+            "FilamentContentBuilder": "VanOns\\FilamentContentBuilder\\Facade\\FilamentContentBuilder"
         }
     },
     "minimum-stability": "dev",

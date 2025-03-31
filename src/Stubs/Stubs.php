@@ -1,6 +1,6 @@
 <?php
 
-namespace VanOns\FilamentContentBlocks\Stubs;
+namespace VanOns\FilamentContentBuilder\Stubs;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\File;

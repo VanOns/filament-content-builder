@@ -1,11 +1,11 @@
 <?php
 
-namespace VanOns\FilamentContentBlocks;
+namespace VanOns\FilamentContentBuilder;
 
 use Filament\Forms\Components\Builder\Block as FilamentBlock;
-use VanOns\FilamentContentBlocks\Blocks\Contracts\Block;
+use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
-class FilamentContentBlocks
+class FilamentContentBuilder
 {
     /**
      * @return array<Block>
@@ -14,7 +14,7 @@ class FilamentContentBlocks
     {
         $blocks = [];
 
-        foreach (config('filament-content-blocks.blocks') as $class) {
+        foreach (config('filament-content-builder.blocks') as $class) {
             if (is_a($class, Block::class, true)) {
                 $blocks[] = $class;
             }

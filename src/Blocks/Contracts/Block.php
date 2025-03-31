@@ -1,6 +1,6 @@
 <?php
 
-namespace VanOns\FilamentContentBlocks\Blocks\Contracts;
+namespace VanOns\FilamentContentBuilder\Blocks\Contracts;
 
 use Filament\Forms\Components\Component;
 use Illuminate\Support\Str;
@@ -27,7 +27,7 @@ abstract class Block
 
     public function render(): string
     {
-        return view('filament-content-blocks::blocks.' . static::view(), ['block' => $this])->render();
+        return view('filament-content-builder::blocks.' . static::view(), ['block' => $this])->render();
     }
 
     public function toArray(): array

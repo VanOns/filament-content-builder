@@ -1,15 +1,15 @@
 <?php
 
-namespace VanOns\FilamentContentBlocks\Fields;
+namespace VanOns\FilamentContentBuilder\Fields;
 
 use Filament\Forms\Components\Builder;
-use VanOns\FilamentContentBlocks\Facade\FilamentContentBlocks;
+use VanOns\FilamentContentBuilder\Facade\FilamentContentBuilder;
 
 class ContentBlocksRenderer extends Builder
 {
     protected function setUp(): void
     {
-        $this->blocks(FilamentContentBlocks::getBuilderBlocks())
+        $this->blocks(FilamentContentBuilder::getBuilderBlocks())
             ->collapsible()
             ->collapsed();
 

@@ -1,6 +1,6 @@
 @php
     /**
-     * @var \VanOns\FilamentContentBlocks\Blocks\CtaBlock $block
+     * @var \VanOns\FilamentContentBuilder\Blocks\CtaBlock $block
      */
 
     $url = $block->url;
