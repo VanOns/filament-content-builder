@@ -1,57 +1,84 @@
-# Package skeleton
+# Filament Content Blocks
 
-This package is meant to give you a default setup for building a new
-laravel package.
+This package exposes a content builder field for Filament, together with a set of basic content blocks. You have the
+full control of the blocks you want to use, and you can easily create your own blocks.
 
-What's included:
+## Installation
 
-- [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer) setup
-- [PHPSTAN](https://phpstan.org/) setup
-- Default service provider and layout to get started with.
-
-## Usage
-
-- Clone this package
-- Review `composer.json`:
-  - Change the name property, description, license.
-  - Change the namespace and service provider classname in the `autoload` and
-  `extra` properties.
-- Remove from the `src/SkeletonServiceProvider` what you won't be using.
-- Change the namespace in the `src` directory's files.
-
-## Development
-
-To develop your package inside an existing Laravel project, add the location
-of the package in a `repositories` property to the `composer.json` file of the
-parent project. If your package would be inside a `packages` directory inside
-the parent project:
+Because this package is not published to Packagist, you need to add it as a repository in your `composer.json` file:
 
 ```json
 "repositories": [
     {
-      "type": "path",
-      "url": "packages/skeleton"
+      "type": "vcs",
+      "url": "https://github.com/VanOns/filament-content-blocks"
     }
-  ]
+]
 ```
 
-Then require the package: `composer require van-ons/skeleton`.
+Then, require the package:
 
-Laravel >8 will throw a version constraint error. You can fix this by doing
-one of the following:
+```bash
+composer require van-ons/filament-content-blocks
+```
 
-1. Change the `minimum-stability` property to `dev` in your `composer.json`
-file.
-2. add a version property to your package's `composer.json` file:
+### Customizing the config
 
-```json
+The config file is where you define the blocks you want to be available in the content builder. To publish the config
+file, run the following command:
+
+```bash
+php artisan vendor:publish --tag=filament-content-blocks-config
+```
+
+### Customizing the views
+
+If you want to customize the views for the default blocks, or the content blocks renderer component, you can publish them.
+To do that, run the following command:
+
+```bash
+php artisan vendor:publish --tag=filament-content-blocks-views
+```
+
+### Customizing the stubs
+
+Stubs are used when creating new blocks. You can customize the stubs to your liking. You can publish the stubs by
+running the following command:
+
+```bash
+php artisan vendor:publish --tag=filament-content-blocks-stubs
+```
+
+## Usage
+
+The core functionality of this package is to provide a content builder field for Filament. You can use it in your
+Filament resources as follows:
+
+```php
+<?php
+
+use App\Models\Post;
+use VanOns\FilamentContentBlocks\Fields\ContentBuilder;
+
+class PostResource extends Resource
 {
-  "version": "1.0.0",
+    protected static ?string $model = Post::class;
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                ContentBlocksRenderer::make('content')
+                    ->label(__('Content'))
+                    ->required(),
+            ]);
+    }
 }
 ```
 
-## Documentation and alternatives
+Then, in the Blade view, you can render the content blocks using the provided Blade component:
 
-- [Laravel documentation](https://laravel.com/docs/11.x/packages)
-- [LaravelPackage.com](https://www.laravelpackage.com/)
-- [Spatie's package skeleton](https://github.com/spatie/package-skeleton-laravel/)
+```blade
+<x-filament-content-blocks::block-renderer :blocks="$post->content" />
+```
+
