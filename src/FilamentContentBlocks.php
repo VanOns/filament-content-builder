@@ -23,4 +23,15 @@ class FilamentContentBlocks
 
         return $blocks;
     }
+
+    public static function getBlock(string $name, array $data): ?Block
+    {
+        $class = 'VanOns\\FilamentContentBlocks\\Blocks\\' . $name;
+
+        if (!is_a($class, Block::class, true)) {
+            return null;
+        }
+
+        return $class::make($data);
+    }
 }
