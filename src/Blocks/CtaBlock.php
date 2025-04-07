@@ -14,7 +14,7 @@ class CtaBlock extends Block
 
     public static function title(): string
     {
-        return __('CTA');
+        return __('filament-content-builder-lang::blocks.cta');
     }
 
     public static function icon(): ?string
@@ -26,16 +26,16 @@ class CtaBlock extends Block
     {
         return [
             TextInput::make('text')
-                ->label(__('Text')),
+                ->label(__('filament-content-builder-lang::fields.text')),
 
             TextInput::make('url')
-                ->label(__('URL')),
+                ->label(__('filament-content-builder-lang::fields.url')),
 
             Select::make('target')
-                ->label(__('Target'))
+                ->label(__('filament-content-builder-lang::fields.target'))
                 ->options([
-                    '_self' => __('Self'),
-                    '_blank' => __('Blank'),
+                    '_self' => __('filament-content-builder-lang::fields.self'),
+                    '_blank' => __('filament-content-builder-lang::fields.blank'),
                 ])
                 ->default('_self')
                 ->required(),

@@ -14,7 +14,7 @@ class TextBlock extends Block
 
     public static function title(): string
     {
-        return __('Text');
+        return __('filament-content-builder-lang::blocks.text');
     }
 
     public static function icon(): ?string
@@ -26,13 +26,13 @@ class TextBlock extends Block
     {
         return [
             TextInput::make('title')
-                ->label(__('Title')),
+                ->label(__('filament-content-builder-lang::fields.title')),
 
             TextInput::make('subtitle')
-                ->label(__('Subtitle')),
+                ->label(__('filament-content-builder-lang::fields.subtitle')),
 
             RichEditor::make('content')
-                ->label(__('Content')),
+                ->label(__('filament-content-builder-lang::fields.content')),
         ];
     }
 }
