@@ -40,6 +40,18 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
             groups: 'filament-content-builder-stubs'
         );
 
+        $this->loadTranslationsFrom(
+            path: __DIR__.'/../lang',
+            namespace: 'filament-content-builder-lang'
+        );
+
+        $this->publishes(
+            paths: [
+                __DIR__.'/../lang' => $this->app->langPath('vendor/filament-content-builder'),
+            ],
+            groups: 'filament-content-builder-lang'
+        );
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeContentBlockCommand::class,

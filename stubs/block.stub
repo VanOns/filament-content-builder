@@ -23,7 +23,7 @@ class {{ class }} extends Block
     {
         return [
             TextInput::make('text')
-                ->label(__('Text')),
+                ->label(__('filament-content-builder-lang::fields.text')),
         ];
     }
 }

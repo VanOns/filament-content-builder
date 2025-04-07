@@ -15,7 +15,7 @@ class ListBlock extends Block
 
     public static function title(): string
     {
-        return __('List');
+        return __('filament-content-builder-lang::blocks.list');
     }
 
     public static function icon(): ?string
@@ -27,21 +27,21 @@ class ListBlock extends Block
     {
         return [
             TextInput::make('title')
-                ->label(__('Title')),
+                ->label(__('filament-content-builder-lang::fields.title')),
 
             Select::make('type')
-                ->label(__('Type'))
+                ->label(__('filament-content-builder-lang::fields.type'))
                 ->options([
-                    'unordered' => __('Unordered'),
-                    'ordered' => __('Ordered'),
+                    'unordered' => __('filament-content-builder-lang::fields.unordered'),
+                    'ordered' => __('filament-content-builder-lang::fields.ordered'),
                 ])
                 ->required(),
 
             Repeater::make('items')
-                ->label(__('Items'))
+                ->label(__('filament-content-builder-lang::fields.items'))
                 ->schema([
                     TextInput::make('text')
-                        ->label(__('Text'))
+                        ->label(__('filament-content-builder-lang::fields.text'))
                         ->required(),
                 ]),
         ];
