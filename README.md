@@ -49,6 +49,14 @@ running the following command:
 php artisan vendor:publish --tag=filament-content-builder-stubs
 ```
 
+### Customizing the language files
+
+If you want to customize the language files, you can publish them by running the following command:
+
+```bash
+php artisan vendor:publish --tag=filament-content-builder-lang
+```
+
 ## Usage
 
 The core functionality of this package is to provide a content builder field for Filament. You can use it in your
