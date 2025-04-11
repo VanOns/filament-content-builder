@@ -66,7 +66,7 @@ Filament resources as follows:
 <?php
 
 use App\Models\Post;
-use VanOns\FilamentContentBuilder\Fields\ContentBuilder;
+use VanOns\FilamentContentBuilder\Fields\ContentBlocksRenderer;
 
 class PostResource extends Resource
 {

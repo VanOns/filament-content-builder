@@ -18,6 +18,15 @@ return [
         \VanOns\FilamentContentBuilder\Blocks\CtaBlock::class,
         \VanOns\FilamentContentBuilder\Blocks\ListBlock::class,
         \VanOns\FilamentContentBuilder\Blocks\TextBlock::class,
+        \VanOns\FilamentContentBuilder\Blocks\EmbedBlock::class,
+    ],
+    /**
+     * Embeddable services, for more info see:
+     * https://github.com/BenSampo/laravel-embed
+     */
+    'embeddable_services' => [
+        \BenSampo\Embed\Services\YouTube::class,
+        \BenSampo\Embed\Services\Vimeo::class,
     ],
 
 ];
