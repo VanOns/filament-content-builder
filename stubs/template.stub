@@ -1,0 +1,24 @@
+<?php
+
+namespace App\View\Templates;
+
+use Filament\Forms\Components\TextInput;
+use Illuminate\Contracts\View\View;
+use VanOns\FilamentContentBuilder\Templates\Contracts\Template;
+
+class {{ class }} extends Template
+{
+    public static function name(): string
+    {
+        return '{{ class }}';
+    }
+
+    public static function fields(string $prefix = 'template_data.'): array
+    {
+        return [
+            TextInput::make($prefix . 'hero_title')
+                ->label(__('admin/field.hero_title'))
+                ->required(),
+        ];
+    }
+}

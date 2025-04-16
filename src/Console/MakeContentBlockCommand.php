@@ -16,7 +16,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
      *
      * @var string
      */
-    protected $signature = 'moopress:make-content-block
+    protected $signature = 'make:content-block
                             {name : The name of the content block}';
 
     /**
