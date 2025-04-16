@@ -10,7 +10,7 @@ return [
     | This option defines the blocks that are available in the content blocks
     | builder. You can add your own blocks by creating a class that implements
     | the `VanOns\FilamentContentBuilder\Blocks\Contracts\Block` interface, or
-    | by simply running `php artisan moopress:make-content-block`.
+    | by simply running `php artisan make:content-block`.
     |
     */
 
@@ -29,4 +29,7 @@ return [
         \BenSampo\Embed\Services\Vimeo::class,
     ],
 
+    'template_directories' => [
+        app_path('/View/Templates')
+    ],
 ];

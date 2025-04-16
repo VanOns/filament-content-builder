@@ -57,7 +57,11 @@ If you want to customize the language files, you can publish them by running the
 php artisan vendor:publish --tag=filament-content-builder-lang
 ```
 
-## Usage
+## Usage - Content Blocks
+Start off by creating a new `content-block`:
+```bash
+php artisan make:content-block
+```
 
 The core functionality of this package is to provide a content builder field for Filament. You can use it in your
 Filament resources as follows:
@@ -89,4 +93,34 @@ Then, in the Blade view, you can render the content blocks using the provided Bl
 ```blade
 <x-filament-content-builder::block-renderer :blocks="$post->content" />
 ```
+## Usage - Templates
+Start off by creating a new `template`:
+```bash
+php artisan make:template
+```
 
+This will create a new template class in the `app/View/Templates` directory. You can use this in your Filament resources, for example `PageResource`:
+
+```php
+<?php
+
+use App\Models\Page;
+use VanOns\FilamentContentBuilder\Fields\ContentBlocksRenderer;
+
+class PageResource extends Resource
+{
+    protected static ?string $model = Page::class;
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                ...app(TemplateService::class)->templateGroups(),
+
+                Template::make('template')
+                    ->required()
+                    ->live(),
+            ]);
+    }
+}
+```

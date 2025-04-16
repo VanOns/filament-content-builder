@@ -4,6 +4,7 @@ namespace VanOns\FilamentContentBuilder;
 
 use Illuminate\Support\ServiceProvider;
 use VanOns\FilamentContentBuilder\Console\MakeContentBlockCommand;
+use VanOns\FilamentContentBuilder\Console\MakeTemplateCommand;
 
 class FilamentContentBuilderServiceProvider extends ServiceProvider
 {
@@ -55,6 +56,7 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeContentBlockCommand::class,
+                MakeTemplateCommand::class,
             ]);
         }
     }
