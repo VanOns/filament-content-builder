@@ -2,6 +2,12 @@
 
 All changes to this project will be documented in this file.
 
+## 1.0.0 - 2025-04-17
+
+Stable release
+
+**Full Changelog**: https://github.com/VanOns/filament-content-builder/compare/v0.0.2...1.0.0
+
 ## v0.0.2 - 2025-04-16
 
 ### What's changed
