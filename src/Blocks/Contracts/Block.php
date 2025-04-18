@@ -27,7 +27,7 @@ abstract class Block
 
     public function render(): string
     {
-        return view('filament-content-builder::blocks.' . static::view(), ['block' => $this])->render();
+        return view(static::view(), ['block' => $this])->render();
     }
 
     public function toArray(): array
@@ -64,7 +64,9 @@ abstract class Block
 
     public static function view(): string
     {
-        return Str::kebab(static::type());
+        return str_contains(static::class, 'VanOns\FilamentContentBuilder\Blocks')
+            ? 'filament-content-builder::blocks.' . Str::kebab(static::type())
+            : 'blocks.' . Str::kebab(static::type());
     }
 
     public static function builderBlock(): \Filament\Forms\Components\Builder\Block

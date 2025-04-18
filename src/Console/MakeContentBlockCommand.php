@@ -44,7 +44,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
     public function handle(): int
     {
         $name = Str::studly($this->argument('name'));
-        $blockName = $name . 'Block';
+        $blockName = $name;
 
         if (FilamentContentBuilder::blockExists($blockName)) {
             $this->fail('The block already exists.');
@@ -80,7 +80,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
         $this->info('Config file published successfully.');
     }
 
-    protected function updateConfigFile(string $blockName, string $namespace = 'App\\Blocks\\'): void
+    protected function updateConfigFile(string $blockName, string $namespace = 'App\\View\\Blocks\\'): void
     {
         $this->line('Adding block to config file...');
 

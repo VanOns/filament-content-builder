@@ -10,7 +10,7 @@ class FileHelper
 {
     public static function makeBlock(string $name, string $title): string
     {
-        $dir = app_path('App/Blocks');
+        $dir = app_path('View/Blocks');
         if (!File::exists($dir)) {
             File::makeDirectory($dir, recursive: true);
         }
@@ -29,7 +29,7 @@ class FileHelper
 
     protected static function makeBlockView(string $name): void
     {
-        $dir = resource_path('views/vendor/filament-content-builder/blocks');
+        $dir = resource_path('views/blocks');
         if (!File::exists($dir)) {
             File::makeDirectory($dir, recursive: true);
         }
