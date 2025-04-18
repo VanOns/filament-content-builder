@@ -10,7 +10,7 @@ class FileHelper
 {
     public static function makeBlock(string $name, string $title): string
     {
-        $dir = app_path('Vendor/FilamentContentBuilder/Blocks');
+        $dir = app_path('App/Blocks');
         if (!File::exists($dir)) {
             File::makeDirectory($dir, recursive: true);
         }

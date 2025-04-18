@@ -80,12 +80,12 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
         $this->info('Config file published successfully.');
     }
 
-    protected function updateConfigFile(string $blockName): void
+    protected function updateConfigFile(string $blockName, string $namespace = 'App\\Blocks\\'): void
     {
         $this->line('Adding block to config file...');
 
         $blocks = config('filament-content-builder.blocks', []);
-        $blocks[] = 'App\\Vendor\\FilamentContentBuilder\\Blocks\\' . $blockName;
+        $blocks[] = $namespace . $blockName;
         $blocks = collect($blocks)->map(fn ($block) => "\\$block::class")->toArray();
 
         $configPath = config_path('filament-content-builder.php');
