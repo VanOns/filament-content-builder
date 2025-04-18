@@ -44,16 +44,19 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
     public function handle(): int
     {
         $name = Str::studly($this->argument('name'));
-        $blockName = $name;
 
-        if (FilamentContentBuilder::blockExists($blockName)) {
+        if (FileHelper::isReservedWord($name)) {
+            $this->fail('The name is a reserved word in PHP.');
+        }
+
+        if (FilamentContentBuilder::blockExists($name)) {
             $this->fail('The block already exists.');
         }
 
         $this->line('Creating block...');
 
         $filePath = FileHelper::makeBlock(
-            name: $blockName,
+            name: $name,
             title: $name,
         );
 
@@ -61,7 +64,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
             $this->publishConfigFile();
         }
 
-        $this->updateConfigFile($blockName);
+        $this->updateConfigFile($name);
 
         $this->info("Block created successfully at $filePath.");
 
