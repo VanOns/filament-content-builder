@@ -44,16 +44,19 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
     public function handle(): int
     {
         $name = Str::studly($this->argument('name'));
-        $blockName = $name . 'Block';
 
-        if (FilamentContentBuilder::blockExists($blockName)) {
+        if (FileHelper::isReservedWord($name)) {
+            $this->fail('The name is a reserved word in PHP.');
+        }
+
+        if (FilamentContentBuilder::blockExists($name)) {
             $this->fail('The block already exists.');
         }
 
         $this->line('Creating block...');
 
         $filePath = FileHelper::makeBlock(
-            name: $blockName,
+            name: $name,
             title: $name,
         );
 
@@ -61,7 +64,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
             $this->publishConfigFile();
         }
 
-        $this->updateConfigFile($blockName);
+        $this->updateConfigFile($name);
 
         $this->info("Block created successfully at $filePath.");
 
@@ -80,12 +83,12 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
         $this->info('Config file published successfully.');
     }
 
-    protected function updateConfigFile(string $blockName): void
+    protected function updateConfigFile(string $blockName, string $namespace = 'App\\View\\Blocks\\'): void
     {
         $this->line('Adding block to config file...');
 
         $blocks = config('filament-content-builder.blocks', []);
-        $blocks[] = 'App\\Vendor\\FilamentContentBuilder\\Blocks\\' . $blockName;
+        $blocks[] = $namespace . $blockName;
         $blocks = collect($blocks)->map(fn ($block) => "\\$block::class")->toArray();
 
         $configPath = config_path('filament-content-builder.php');
