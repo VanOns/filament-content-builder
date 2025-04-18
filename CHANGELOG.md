@@ -2,6 +2,17 @@
 
 All changes to this project will be documented in this file.
 
+## v1.0.1 - 2025-04-18
+
+### What's changed
+
+- feat: change namespace & path of `MakeContentBlockCommand` #9 (by @KianAcquoy)
+
+### 🛠 Changes
+
+- chore(deps): bump actions/cache from 3 to 4 #3 (by @[dependabot[bot]](https://github.com/apps/dependabot))
+- chore(deps): bump actions/checkout from 3 to 4 #2 (by @[dependabot[bot]](https://github.com/apps/dependabot))
+
 ## 1.0.0 - 2025-04-17
 
 Stable release
