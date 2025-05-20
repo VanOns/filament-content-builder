@@ -8,6 +8,8 @@ use RuntimeException;
 
 abstract class Block
 {
+    public int $blockIndex = 0;
+
     /**
      * @return array<Component>
      */

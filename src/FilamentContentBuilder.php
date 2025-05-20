@@ -39,8 +39,13 @@ class FilamentContentBuilder
             ->contains(fn (Block|string $block) => $block::type() === $name);
     }
 
-    public static function getBlock(string $name, array $data): ?Block
+    public static function getBlock(string $name, array $data, int $index = 0): ?Block
     {
+        $data = [
+            ...$data,
+            'blockIndex' => $index,
+        ];
+
         /** @var Block|null $class */
         $class = collect(static::getBlocks())
             ->first(fn (Block|string $block) => $block::type() === $name);
