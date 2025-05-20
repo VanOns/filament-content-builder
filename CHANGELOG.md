@@ -2,6 +2,12 @@
 
 All changes to this project will be documented in this file.
 
+## v1.0.2 - 2025-05-20
+
+### What's changed
+
+* [Add `blockIndex` to `Block` class](https://github.com/VanOns/filament-content-builder/commit/8f0ccff9339a9b549a9589b5f152256eb8f96942)
+
 ## v1.0.1 - 2025-04-18
 
 ### What's changed
