@@ -5,9 +5,12 @@ namespace VanOns\FilamentContentBuilder\Blocks\Contracts;
 use Filament\Forms\Components\Component;
 use Illuminate\Support\Str;
 use RuntimeException;
+use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
 
 abstract class Block
 {
+    use CanBeFixed;
+
     public int $blockIndex = 0;
 
     /**

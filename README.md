@@ -93,6 +93,50 @@ Then, in the Blade view, you can render the content blocks using the provided Bl
 ```blade
 <x-filament-content-builder::block-renderer :blocks="$post->content" />
 ```
+
+### Fixed blocks
+Fixed blocks are blocks that are fixed to a resource. For example, a hero block.
+This block is usually always on top of the page. With fixed blocks you can 'fix' the block fields to a resource, and then render it on a specific place on the page.
+
+```php
+use App\Models\Page;
+use App\View\Blocks\Hero;
+use VanOns\FilamentContentBuilder\Fields\ContentBlocksRenderer;
+
+class PageResource extends Resource
+{
+    protected static ?string $model = Page::class;
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                // Other fields...
+
+                ...Hero::getFields('data.hero-block')
+            ]);
+    }
+}
+```
+
+Now, you can render it on your page like this:
+```bladehtml
+@extends('layouts.app')
+
+@section('content')
+<div class="...">
+    <div class="...">
+        <x-filament-content-builder::block block="hero" :data="$page->data['hero-block']" />
+        <x-filament-content-builder::block-renderer :blocks="$page->content" />
+    </div>
+</div>
+@endsection
+```
+
+### Block index
+All blocks have the `blockIndex` property. This is a number that increments when a block is rendered.
+For example, this can be used to add a delayed fade in animation to the blocks.
+
 ## Usage - Templates
 Start off by creating a new `template`:
 ```bash

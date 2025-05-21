@@ -10,7 +10,7 @@
             /**
              * @var ?\VanOns\FilamentContentBuilder\Blocks\Contracts\Block $blockInstance
              */
-            $blockInstance = \VanOns\FilamentContentBuilder\Facade\FilamentContentBuilder::getBlock($block['type'], $block['data'], $loop->index);
+            $blockInstance = \VanOns\FilamentContentBuilder\Facade\FilamentContentBuilder::getBlock($block['type'], $block['data']);
 
             if (!$blockInstance) {
                 continue;

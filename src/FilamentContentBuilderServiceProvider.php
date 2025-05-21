@@ -2,9 +2,11 @@
 
 namespace VanOns\FilamentContentBuilder;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use VanOns\FilamentContentBuilder\Console\MakeContentBlockCommand;
 use VanOns\FilamentContentBuilder\Console\MakeTemplateCommand;
+use VanOns\FilamentContentBuilder\View\Components\Block;
 
 class FilamentContentBuilderServiceProvider extends ServiceProvider
 {
@@ -59,6 +61,8 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
                 MakeTemplateCommand::class,
             ]);
         }
+
+        Blade::component('filament-content-builder::block', Block::class);
     }
 
     public function register(): void
