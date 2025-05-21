@@ -2,6 +2,12 @@
 
 All changes to this project will be documented in this file.
 
+## v1.0.3 - 2025-05-21
+
+### What's changed
+
+- feat(fixed-blocks): implement `fixed` blocks feature #10 (by @KianAcquoy)
+
 ## v1.0.2 - 2025-05-20
 
 ### What's changed
