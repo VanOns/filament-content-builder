@@ -7,6 +7,8 @@ use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 class FilamentContentBuilder
 {
+    public static int $blockIndex = 0;
+
     /**
      * @return array<Block>
      */
@@ -39,11 +41,11 @@ class FilamentContentBuilder
             ->contains(fn (Block|string $block) => $block::type() === $name);
     }
 
-    public static function getBlock(string $name, array $data, int $index = 0): ?Block
+    public static function getBlock(string $name, array $data): ?Block
     {
         $data = [
             ...$data,
-            'blockIndex' => $index,
+            'blockIndex' => self::$blockIndex++,
         ];
 
         /** @var Block|null $class */
