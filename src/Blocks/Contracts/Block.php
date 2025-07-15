@@ -6,12 +6,15 @@ use Filament\Forms\Components\Component;
 use Illuminate\Support\Str;
 use RuntimeException;
 use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
+use VanOns\FilamentContentBuilder\Traits\HasDynamicLabel;
 
 abstract class Block
 {
     use CanBeFixed;
+    use HasDynamicLabel;
 
     public int $blockIndex = 0;
+    public static ?string $labelField = null;
 
     /**
      * @return array<Component>
@@ -77,7 +80,7 @@ abstract class Block
     public static function builderBlock(): \Filament\Forms\Components\Builder\Block
     {
         return \Filament\Forms\Components\Builder\Block::make(static::type())
-            ->label(static::title())
+            ->label(fn (mixed $state) => static::getLabel($state) ?? static::title())
             ->icon(static::icon())
             ->schema(static::schema());
     }
