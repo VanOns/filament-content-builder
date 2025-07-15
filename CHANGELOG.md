@@ -2,6 +2,12 @@
 
 All changes to this project will be documented in this file.
 
+## v1.0.4 - 2025-07-15
+
+### What's changed
+
+- [FC-47] Implement dynamic label for blocks #12 (by @KianAcquoy)
+
 ## v1.0.3 - 2025-05-21
 
 ### What's changed
