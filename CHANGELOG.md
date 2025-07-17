@@ -2,6 +2,12 @@
 
 All changes to this project will be documented in this file.
 
+## v1.0.5 - 2025-07-17
+
+### What's changed
+
+* [deprecated getFields method](https://github.com/VanOns/filament-content-builder/commit/b4455884af37de6af391313cc2706963ce448f49)
+
 ## v1.0.4 - 2025-07-15
 
 ### What's changed
