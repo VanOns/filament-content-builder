@@ -5,4 +5,5 @@ return [
     'list' => 'Lijst',
     'text' => 'Tekst',
     'embed' => 'Embed',
+    'container' => 'Container',
 ];
