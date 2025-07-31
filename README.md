@@ -137,6 +137,20 @@ Now, you can render it on your page like this:
 All blocks have the `blockIndex` property. This is a number that increments when a block is rendered.
 For example, this can be used to add a delayed fade in animation to the blocks.
 
+### Container & nested blocks
+Container blocks are blocks that have other blocks inside of them. This package already contains a `Container` block, extend this, or use it as an example, to create your own `Container` block.
+
+Inside the container's view, you can add the `nested` property to the `block-renderer` component.
+```bladehtml
+<x-filament-content-builder::block-renderer :blocks="$container->blocks" :nested="true" />
+```
+This will give all nested blocks the `nested` property. You can conditionally use this property, inside the block's view, to alter the rendering of the nested blocks.
+```bladehtml
+@if ($block->nested)
+    Do something for the nested block...
+@endif
+```
+
 ## Usage - Templates
 Start off by creating a new `template`:
 ```bash

@@ -6,12 +6,14 @@ use Filament\Forms\Components\Component;
 use Illuminate\Support\Str;
 use RuntimeException;
 use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
+use VanOns\FilamentContentBuilder\Traits\CanBeNested;
 use VanOns\FilamentContentBuilder\Traits\HasDynamicLabel;
 
 abstract class Block
 {
     use CanBeFixed;
     use HasDynamicLabel;
+    use CanBeNested;
 
     public int $blockIndex = 0;
     public static ?string $labelField = null;

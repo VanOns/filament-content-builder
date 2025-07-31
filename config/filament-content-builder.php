@@ -19,7 +19,13 @@ return [
         \VanOns\FilamentContentBuilder\Blocks\ListBlock::class,
         \VanOns\FilamentContentBuilder\Blocks\TextBlock::class,
         \VanOns\FilamentContentBuilder\Blocks\EmbedBlock::class,
+        \VanOns\FilamentContentBuilder\Blocks\Container::class,
     ],
+
+    'container-blocks' => [
+        \VanOns\FilamentContentBuilder\Blocks\TextBlock::class,
+    ],
+
     /**
      * Embeddable services, for more info see:
      * https://github.com/BenSampo/laravel-embed

@@ -26,11 +26,27 @@ class FilamentContentBuilder
     }
 
     /**
+     * @return array<Block>
+     */
+    public static function getContainerBlocks(): array
+    {
+        $blocks = [];
+
+        foreach (config('filament-content-builder.container-blocks') as $class) {
+            if (is_a($class, Block::class, true)) {
+                $blocks[] = $class;
+            }
+        }
+
+        return $blocks;
+    }
+
+    /**
      * @return array<FilamentBlock>
      */
-    public static function getBuilderBlocks(): array
+    public static function getBuilderBlocks(?array $blocks = null): array
     {
-        return collect(static::getBlocks())
+        return collect($blocks ?? static::getBlocks())
             ->map(fn (Block|string $block) => $block::builderBlock())
             ->toArray();
     }
@@ -45,7 +61,7 @@ class FilamentContentBuilder
     {
         $data = [
             ...$data,
-            'blockIndex' => self::$blockIndex++,
+            'blockIndex' => static::$blockIndex++,
         ];
 
         /** @var Block|null $class */
