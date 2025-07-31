@@ -2,6 +2,12 @@
 
 All changes to this project will be documented in this file.
 
+## v1.0.6 - 2025-07-31
+
+### What's changed
+
+- feat(container-block): create `Container` block #13 (by @KianAcquoy)
+
 ## v1.0.5 - 2025-07-17
 
 ### What's changed
