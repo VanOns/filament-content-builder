@@ -47,6 +47,19 @@ abstract class Block
         ];
     }
 
+    public function parseArray(): array
+    {
+        return [
+            'type' => static::type(),
+            'data' => $this->parseData(),
+        ];
+    }
+
+    public function parseData(): array
+    {
+        return $this->data;
+    }
+
     public static function make(array $data): static
     {
         return app(static::class, ['data' => $data]);
