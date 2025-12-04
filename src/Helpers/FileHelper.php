@@ -28,7 +28,7 @@ class FileHelper
             File::makeDirectory($dir, recursive: true);
         }
 
-        $file = "$dir/$name.php";
+        $file = "{$dir}/{$name}.php";
 
         Stubs::createFromStub($file, 'block', [
             'class' => $name,
@@ -48,7 +48,7 @@ class FileHelper
         }
 
         $filename = Str::kebab($name);
-        $file = "$dir/$filename.blade.php";
+        $file = "{$dir}/{$filename}.blade.php";
 
         Stubs::createFromStub($file, 'block-view', [
             'class' => $name,

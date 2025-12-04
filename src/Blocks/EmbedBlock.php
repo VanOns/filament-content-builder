@@ -27,7 +27,7 @@ class EmbedBlock extends Block
                 ->label(__('filament-content-builder-lang::fields.url'))
                 ->url()
                 ->rule(
-                    (new EmbeddableUrl)
+                    (new EmbeddableUrl())
                         ->allowedServices(
                             config('filament-content-builder.embeddable_services')
                         )

@@ -36,6 +36,6 @@ return [
     ],
 
     'template_directories' => [
-        app_path('/View/Templates')
+        app_path('/View/Templates'),
     ],
 ];

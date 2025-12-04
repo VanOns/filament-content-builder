@@ -30,8 +30,8 @@ class Stubs
      */
     public static function getStubPath(string $stub): string
     {
-        $base = base_path("stubs/$stub.stub");
-        $default = __DIR__ . "/../../stubs/$stub.stub";
+        $base = base_path("stubs/{$stub}.stub");
+        $default = __DIR__ . "/../../stubs/{$stub}.stub";
 
         return File::exists($base)
             ? $base
@@ -49,7 +49,7 @@ class Stubs
         foreach ($replacements as $search => $replace) {
             $content = is_null($replace)
                 ? preg_replace('/^.*{{\s*' . preg_quote($search, '/') . '\s*}}.*$\n?/m', '', $content)
-                : str_replace("{{ $search }}", $replace, $content);
+                : str_replace("{{ {$search} }}", $replace, $content);
         }
 
         return $content;

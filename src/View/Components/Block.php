@@ -14,7 +14,8 @@ class Block extends Component
         public string $block,
         public ?array $data = [],
         public ?bool $nested = false,
-    ) {}
+    ) {
+    }
 
     public function getData(): array
     {
