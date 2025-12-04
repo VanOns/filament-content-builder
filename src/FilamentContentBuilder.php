@@ -71,6 +71,17 @@ class FilamentContentBuilder
         return $class ? $class::make($data) : null;
     }
 
+    public static function parseBlockInstances(array $blocks): array
+    {
+        return collect($blocks)->map(function (array $block) {
+            if (!static::blockExists($block['type'])) {
+                return null;
+            }
+
+            return static::getBlock($block['type'], $block['data']);
+        })->filter()->toArray();
+    }
+
     public static function parseBlocks(array $blocks): array
     {
         return array_map(function ($block) {
