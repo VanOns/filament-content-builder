@@ -98,4 +98,13 @@ abstract class Block
             ->icon(static::icon())
             ->schema(static::schema());
     }
+
+    /**
+     * Convert the block to plain text, this can be useful for things like SEO analysis.
+     * @return string|null
+     */
+    public function toText(): ?string
+    {
+        return null;
+    }
 }
