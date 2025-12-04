@@ -66,7 +66,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
 
         $this->updateConfigFile($name);
 
-        $this->info("Block created successfully at $filePath.");
+        $this->info("Block created successfully at {$filePath}.");
 
         return self::SUCCESS;
     }
@@ -89,7 +89,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
 
         $blocks = config('filament-content-builder.blocks', []);
         $blocks[] = $namespace . $blockName;
-        $blocks = collect($blocks)->map(fn ($block) => "\\$block::class")->toArray();
+        $blocks = collect($blocks)->map(fn ($block) => "\\{$block}::class")->toArray();
 
         $configPath = config_path('filament-content-builder.php');
         $configContent = File::get($configPath);

@@ -2,7 +2,6 @@
 
 namespace VanOns\FilamentContentBuilder\Blocks\Contracts;
 
-use Filament\Forms\Components\Component;
 use Illuminate\Support\Str;
 use RuntimeException;
 use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
@@ -19,7 +18,7 @@ abstract class Block
     public static ?string $labelField = null;
 
     /**
-     * @return array<Component>
+     * @return array<\Filament\Schemas\Components\Component>
      */
     public static function schema(): array
     {
@@ -98,5 +97,14 @@ abstract class Block
             ->label(fn (mixed $state) => static::getLabel($state) ?? static::title())
             ->icon(static::icon())
             ->schema(static::schema());
+    }
+
+    /**
+     * Convert the block to plain text, this can be useful for things like SEO analysis.
+     * @return string|null
+     */
+    public function toText(): ?string
+    {
+        return null;
     }
 }

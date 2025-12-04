@@ -10,7 +10,9 @@ use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
  */
 trait CanBeFixed
 {
-    /** @deprecated Will be removed in future versions. Use `::schema()` directly instead (to change statepath, wrap in a container and use `statePath()`). */
+    /**
+     * @deprecated Will be removed in future versions. Use `::schema()` directly instead (to change statepath, wrap in a container and use `statePath()`).
+     */
     public static function getFields(string $prefix = ''): array
     {
         /** @var Field[] $schema */

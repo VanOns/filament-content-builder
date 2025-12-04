@@ -67,8 +67,6 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->app->bind('filament-content-builder', function () {
-            return new FilamentContentBuilder();
-        });
+        $this->app->bind('filament-content-builder', FilamentContentBuilder::class);
     }
 }

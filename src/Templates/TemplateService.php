@@ -21,7 +21,7 @@ class TemplateService
             return null;
         }
 
-        return new $template;
+        return new $template();
     }
 
     public function templates(): Collection
@@ -29,7 +29,7 @@ class TemplateService
         $classes = [];
 
         foreach (config('filament-content-builder.template_directories') as $dir) {
-            foreach(glob($dir . '/{,*/}*.php', GLOB_BRACE) as $file) {
+            foreach (glob($dir . '/{,*/}*.php', GLOB_BRACE) as $file) {
                 $class = Str::of($file)->replace(app_path(), 'App')->replace('/', '\\')->replace('.php', '')->toString();
                 if (class_exists($class) && is_subclass_of($class, Template::class)) {
                     $classes[] = $class;
