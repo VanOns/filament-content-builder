@@ -2,6 +2,14 @@
 
 All changes to this project will be documented in this file.
 
+## v1.0.7 - 2026-01-07
+
+### What's changed
+
+* [fix: update builderBlock methods to use closures](https://github.com/VanOns/filament-content-builder/commit/7eb26cf632866aafe6c70f4d1f18b7f4474a640d)
+
+**Full Changelog**: https://github.com/VanOns/filament-content-builder/compare/v1.0.6...v1.0.7
+
 ## v1.0.6 - 2025-07-31
 
 ### What's changed
