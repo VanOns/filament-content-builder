@@ -95,8 +95,8 @@ abstract class Block
     {
         return \Filament\Forms\Components\Builder\Block::make(static::type())
             ->label(fn (mixed $state) => static::getLabel($state) ?? static::title())
-            ->icon(static::icon())
-            ->schema(static::schema());
+            ->icon(fn () => static::icon())
+            ->schema(fn () => static::schema());
     }
 
     /**
