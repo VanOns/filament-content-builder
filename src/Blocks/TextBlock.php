@@ -8,8 +8,6 @@ use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 class TextBlock extends Block
 {
-    public string $title;
-    public string $subtitle;
     public string $content;
 
     public static function title(): string
@@ -25,12 +23,6 @@ class TextBlock extends Block
     public static function schema(): array
     {
         return [
-            TextInput::make('title')
-                ->label(__('filament-content-builder-lang::fields.title')),
-
-            TextInput::make('subtitle')
-                ->label(__('filament-content-builder-lang::fields.subtitle')),
-
             RichEditor::make('content')
                 ->label(__('filament-content-builder-lang::fields.content')),
         ];
