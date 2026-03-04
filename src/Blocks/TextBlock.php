@@ -3,7 +3,6 @@
 namespace VanOns\FilamentContentBuilder\Blocks;
 
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\TextInput;
 use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 class TextBlock extends Block
