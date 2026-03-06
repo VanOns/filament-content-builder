@@ -109,6 +109,7 @@ Then, in the Blade view, you can render the content blocks using the provided Bl
 ### Fixed blocks
 Fixed blocks are blocks that are fixed to a resource. For example, a hero block.
 This block is usually always on top of the page. With fixed blocks you can 'fix' the block fields to a resource, and then render it on a specific place on the page.
+You will need to wrap the block schema in a wrapper component, such as a section in the example below, to specify the statePath where the data for the fixed blocks will be stored in your model.
 
 ```php
 use App\Models\Page;
@@ -125,7 +126,9 @@ class PageResource extends Resource
             ->schema([
                 // Other fields...
 
-                ...Hero::getFields('data.hero-block')
+                Section::make()->statePath('data.hero-block')->schema([
+                    ...Hero::schema()
+                ])
             ]);
     }
 }
