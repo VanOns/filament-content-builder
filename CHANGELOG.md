@@ -2,13 +2,29 @@
 
 All changes to this project will be documented in this file.
 
-## v1.0.7 - 2026-01-07
+## v2.0.3 - 2026-03-06
+
+### What's changed
+
+- Filament v5 support
+
+**Full Changelog**: https://github.com/VanOns/filament-content-builder/compare/v2.0.2...v2.0.3
+
+## v2.0.2 - 2026-03-04
+
+### What's changed
+
+- refactor: remove title and subtitle fields from TextBlock [#19](https://github.com/VanOns/filament-content-builder/pull/19) (by [@mauricewijnia](https://github.com/mauricewijnia))
+
+**Full Changelog**: https://github.com/VanOns/filament-content-builder/compare/v2.0.1...v2.0.2
+
+## v2.0.1 - 2026-01-07
 
 ### What's changed
 
 * [fix: update builderBlock methods to use closures](https://github.com/VanOns/filament-content-builder/commit/7eb26cf632866aafe6c70f4d1f18b7f4474a640d)
 
-**Full Changelog**: https://github.com/VanOns/filament-content-builder/compare/v1.0.6...v1.0.7
+**Full Changelog**: https://github.com/VanOns/filament-content-builder/compare/v1.0.6...v2.0.1
 
 ## v1.0.6 - 2025-07-31
 
