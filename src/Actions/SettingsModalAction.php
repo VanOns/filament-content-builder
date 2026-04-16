@@ -33,37 +33,38 @@ class SettingsModalAction extends Action
      */
     protected function getBlockClass(array $arguments, array $state): ?string
     {
-        if (!isset($arguments['item'])) {
-            return null;
-        }
-        $data = $state[$arguments['item']];
+        $data = $this->getBlockItemData($arguments, $state);
 
-        return FilamentContentBuilder::getBlockClass($data['type'] ?? null);
+        return $data ? FilamentContentBuilder::getBlockClass($data['type'] ?? null) : null;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    protected function getBlockItemData(array $arguments, array $state): ?array
+    {
+        return isset($arguments['item']) ? ($state[$arguments['item']] ?? null) : null;
     }
 
     protected function getBlockSettingsTitle(array $arguments, array $state): string
     {
         $class = $this->getBlockClass($arguments, $state);
-        if (!$class) {
-            return Block::settingsTitle();
-        }
 
-        return $class::settingsTitle();
+        return $class ? $class::settingsTitle() : Block::settingsTitle();
     }
 
     protected function getBlockSettingsIcon(array $arguments, array $state): string
     {
         $class = $this->getBlockClass($arguments, $state);
-        if (!$class) {
-            return Block::settingsIcon();
-        }
 
-        return $class::settingsIcon();
+        return $class ? $class::settingsIcon() : Block::settingsIcon();
     }
 
     protected function hasBlockSettings(array $arguments, array $state): bool
     {
-        return empty($this->getBlockSettingsSchema($arguments, $state)) === false;
+        $class = $this->getBlockClass($arguments, $state);
+
+        return $class && !empty($class::settingsSchema());
     }
 
     protected function getBlockSettingsSchema(array $arguments, array $state): array
@@ -83,23 +84,27 @@ class SettingsModalAction extends Action
     protected function getBlockSettingsData(array $arguments, array $state): array
     {
         $class = $this->getBlockClass($arguments, $state);
-        return $state[$arguments['item']]['data'][$class::settingsPrefix()] ?? [];
+        if (!$class) {
+            return [];
+        }
+
+        $data = $this->getBlockItemData($arguments, $state);
+
+        return $data['data'][$class::settingsPrefix()] ?? [];
     }
 
     protected function setBlockSettingsData(Builder $component, array $arguments, array $state, Set $set, array $data): void
     {
-        $id = $arguments['item'];
-        if (!isset($arguments['item']) || !($class = $this->getBlockClass($arguments, $state))) {
+        $class = $this->getBlockClass($arguments, $state);
+        if (!$class) {
             return;
         }
 
-        $key = implode('.', [
+        $set(implode('.', [
             $component->getName(),
-            $id,
+            $arguments['item'],
             'data',
             $class::settingsPrefix(),
-        ]);
-
-        $set($key, $data);
+        ]), $data);
     }
 }
