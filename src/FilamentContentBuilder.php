@@ -64,11 +64,25 @@ class FilamentContentBuilder
             'blockIndex' => static::$blockIndex++,
         ];
 
-        /** @var Block|null $class */
+        $class = static::getBlockClass($name);
+
+        return $class ? $class::make($data) : null;
+    }
+
+    /**
+     * @return class-string<Block>|null
+     */
+    public static function getBlockClass(?string $name): ?string
+    {
+        if (!$name) {
+            return null;
+        }
+
+        /** @var ?string $class */
         $class = collect(static::getBlocks())
             ->first(fn (Block|string $block) => $block::type() === $name);
 
-        return $class ? $class::make($data) : null;
+        return is_string($class) ? $class : null;
     }
 
     public static function parseBlockInstances(array $blocks): array
