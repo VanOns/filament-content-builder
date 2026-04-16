@@ -78,6 +78,7 @@ class FilamentContentBuilder
             return null;
         }
 
+        /** @var ?string $class */
         $class = collect(static::getBlocks())
             ->first(fn (Block|string $block) => $block::type() === $name);
 
