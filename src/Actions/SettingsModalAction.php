@@ -39,9 +39,6 @@ class SettingsModalAction extends Action
         return $data ? FilamentContentBuilder::getBlockClass($data['type'] ?? null) : null;
     }
 
-    /**
-     * @return array<string, mixed>|null
-     */
     protected function getBlockItemData(array $arguments, array $state): ?array
     {
         return isset($arguments['item']) ? ($state[$arguments['item']] ?? null) : null;
