@@ -11,6 +11,9 @@ use VanOns\FilamentContentBuilder\FilamentContentBuilder;
 
 class SettingsModalAction extends Action
 {
+    /** @var array<string, class-string<Block>|null> */
+    protected array $resolvedBlockClasses = [];
+
     public static function getDefaultName(): ?string
     {
         return 'settings';
@@ -35,8 +38,17 @@ class SettingsModalAction extends Action
     protected function getBlockClass(array $arguments, array $state): ?string
     {
         $data = $this->getBlockItemData($arguments, $state);
+        $type = $data['type'] ?? null;
 
-        return $data ? FilamentContentBuilder::getBlockClass($data['type'] ?? null) : null;
+        if (!$type) {
+            return null;
+        }
+
+        if (array_key_exists($type, $this->resolvedBlockClasses)) {
+            return $this->resolvedBlockClasses[$type];
+        }
+
+        return $this->resolvedBlockClasses[$type] = FilamentContentBuilder::getBlockClass($type);
     }
 
     protected function getBlockItemData(array $arguments, array $state): ?array
@@ -73,7 +85,7 @@ class SettingsModalAction extends Action
         }
 
         return [
-            Group::make($schema)
+            Group::make(fn () => $schema)
                 ->columnSpanFull()
                 ->columns(),
         ];
