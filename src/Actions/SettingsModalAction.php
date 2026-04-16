@@ -100,11 +100,13 @@ class SettingsModalAction extends Action
             return;
         }
 
+        $mutatedData = $class::mutateSettingsData($data);
+
         $set(implode('.', [
             $component->getName(),
             $arguments['item'],
             'data',
             $class::settingsPrefix(),
-        ]), $data);
+        ]), $mutatedData);
     }
 }

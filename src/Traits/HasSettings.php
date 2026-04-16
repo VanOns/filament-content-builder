@@ -4,6 +4,11 @@ namespace VanOns\FilamentContentBuilder\Traits;
 
 trait HasSettings
 {
+    public function getSettings(): array
+    {
+        return $this->data[static::settingsPrefix()] ?? [];
+    }
+
     public static function settingsPrefix(): string
     {
         return 'settings';
@@ -22,5 +27,10 @@ trait HasSettings
     public static function settingsSchema(): array
     {
         return [];
+    }
+
+    public static function mutateSettingsData(array $data): array
+    {
+        return $data;
     }
 }
