@@ -7,12 +7,14 @@ use RuntimeException;
 use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
 use VanOns\FilamentContentBuilder\Traits\CanBeNested;
 use VanOns\FilamentContentBuilder\Traits\HasDynamicLabel;
+use VanOns\FilamentContentBuilder\Traits\HasSettings;
 
 abstract class Block
 {
     use CanBeFixed;
     use HasDynamicLabel;
     use CanBeNested;
+    use HasSettings;
 
     public int $blockIndex = 0;
     public static ?string $labelField = null;

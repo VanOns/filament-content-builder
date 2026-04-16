@@ -13,4 +13,5 @@ return [
     'type' => 'Type',
     'unordered' => 'Ongeordend',
     'url' => 'URL',
+    'settings' => 'Instellingen',
 ];
