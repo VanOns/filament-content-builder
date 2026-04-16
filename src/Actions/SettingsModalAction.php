@@ -11,7 +11,9 @@ use VanOns\FilamentContentBuilder\FilamentContentBuilder;
 
 class SettingsModalAction extends Action
 {
-    /** @var array<string, class-string<Block>|null> */
+    /**
+     * @var array<string, class-string<Block>|null>
+     */
     protected array $resolvedBlockClasses = [];
 
     public static function getDefaultName(): ?string
