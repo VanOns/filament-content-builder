@@ -25,6 +25,7 @@ class SettingsModalAction extends Action
             ->visible($this->hasBlockSettings(...))
             ->schema($this->getBlockSettingsSchema(...))
             ->fillForm($this->getBlockSettingsData(...))
+            ->mutateDataUsing($this->mutateBlockSettingsData(...))
             ->action($this->setBlockSettingsData(...));
     }
 
@@ -93,6 +94,16 @@ class SettingsModalAction extends Action
         return $data['data'][$class::settingsPrefix()] ?? [];
     }
 
+    protected function mutateBlockSettingsData(array $arguments, array $state, array $data): array
+    {
+        $class = $this->getBlockClass($arguments, $state);
+        if (!$class) {
+            return [];
+        }
+
+        return $class::mutateSettingsData($data);
+    }
+
     protected function setBlockSettingsData(Builder $component, array $arguments, array $state, Set $set, array $data): void
     {
         $class = $this->getBlockClass($arguments, $state);
@@ -100,13 +111,11 @@ class SettingsModalAction extends Action
             return;
         }
 
-        $mutatedData = $class::mutateSettingsData($data);
-
         $set(implode('.', [
             $component->getName(),
             $arguments['item'],
             'data',
             $class::settingsPrefix(),
-        ]), $mutatedData);
+        ]), $data);
     }
 }
