@@ -166,6 +166,21 @@ This will give all nested blocks the `nested` property. You can conditionally us
 @endif
 ```
 
+## Copy & paste blocks
+
+Each content block has a **copy** button that copies the block data as JSON to the clipboard. A **paste** button on the builder field lets you paste that JSON. Even across pages, posts, or any other resource.
+
+The paste modal validates that the pasted data is valid JSON, contains the required `type` and `data` keys, and that the block type is registered. Errors are shown inline.
+
+### Disabling copy & paste
+
+The feature is enabled by default. To disable it, set `copy_paste` to `false` in the published config:
+
+```php
+// config/filament-content-builder.php
+'copy_paste' => false,
+```
+
 ## Usage - Templates
 Start off by creating a new `template`:
 ```bash
