@@ -14,4 +14,12 @@ return [
     'unordered' => 'Unordered',
     'url' => 'URL',
     'settings' => 'Settings',
+    'copy_block' => 'Copy block',
+    'copy_block_success' => 'Block copied to clipboard',
+    'paste_block' => 'Paste block',
+    'paste_block_heading' => 'Paste a copied block',
+    'paste_block_description' => 'Paste the JSON data of a copied block.',
+    'paste_block_submit' => 'Paste block',
+    'paste_block_data_label' => 'Block data',
+    'paste_block_data_helper' => 'Copy a block using the copy button, then paste the result here.',
 ];

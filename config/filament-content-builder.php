@@ -38,4 +38,17 @@ return [
     'template_directories' => [
         app_path('/View/Templates'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Copy / Paste blocks
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, each content block gets a copy button, and a paste button
+    | appears on the builder field to import a previously copied block.
+    |
+    */
+
+    'copy_paste' => true,
+
 ];
