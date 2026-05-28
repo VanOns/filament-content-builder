@@ -14,4 +14,12 @@ return [
     'unordered' => 'Ongeordend',
     'url' => 'URL',
     'settings' => 'Instellingen',
+    'copy_block' => 'Blok kopiëren',
+    'copy_block_success' => 'Blok gekopieerd naar klembord',
+    'paste_block' => 'Blok plakken',
+    'paste_block_heading' => 'Gekopieerd blok plakken',
+    'paste_block_description' => 'Plak de JSON-data van een gekopieerd blok.',
+    'paste_block_submit' => 'Blok plakken',
+    'paste_block_data_label' => 'Blokdata',
+    'paste_block_data_helper' => 'Kopieer een blok via de kopieerknop en plak het resultaat hier.',
 ];
