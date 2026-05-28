@@ -34,7 +34,7 @@ class PasteBlockAction extends Action
                     ->helperText(__('filament-content-builder-lang::fields.paste_block_data_helper'))
                     ->rows(6)
                     ->required()
-                    ->rules([new ValidBlockData]),
+                    ->rules([new ValidBlockData()]),
             ])
             ->action(function (Builder $component, array $data, array $state) {
                 $block = json_decode($data['paste'], true);
