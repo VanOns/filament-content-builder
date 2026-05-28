@@ -21,10 +21,10 @@ class ContentBlocksRenderer extends Builder
             ->contentBlocks(FilamentContentBuilder::getBlocks())
             ->extraItemActions([
                 SettingsModalAction::make(),
-                CopyBlockData::make(),
+                CopyBlockData::make()->hidden(! config('filament-content-builder.copy_paste', true)),
             ])
             ->hintActions([
-                PasteBlockAction::make(),
+                PasteBlockAction::make()->hidden(! config('filament-content-builder.copy_paste', true)),
             ])
             ->collapsible()
             ->collapsed();

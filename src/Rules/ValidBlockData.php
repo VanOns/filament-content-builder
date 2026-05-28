@@ -24,6 +24,12 @@ class ValidBlockData implements ValidationRule
             return;
         }
 
+        if (! is_string($block['type']) || $block['type'] === '') {
+            $fail(__('filament-content-builder-lang::validation.block_missing_keys'));
+
+            return;
+        }
+
         if (! is_array($block['data'])) {
             $fail(__('filament-content-builder-lang::validation.block_data_not_array'));
 
