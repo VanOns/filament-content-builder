@@ -36,7 +36,7 @@ class PasteBlockAction extends Action
                     ->required()
                     ->rules([new ValidBlockData()]),
             ])
-            ->action(function (Builder $component, array $data, array $state) {
+            ->action(function (Builder $component, array $data, ?array $state) {
                 $block = json_decode($data['paste'], true);
 
                 if (! is_array($block)) {
@@ -44,7 +44,7 @@ class PasteBlockAction extends Action
                 }
 
                 $component->state([
-                    ...$state,
+                    ...$state ?? [],
                     Str::uuid()->toString() => $block,
                 ]);
             });
