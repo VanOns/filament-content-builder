@@ -1,13 +1,13 @@
 {
     "name": "van-ons/filament-content-builder",
-    "description": "A package that provides a content builder with a set of frequently used content blocks in Filament.",
+    "description": "A Filament package that adds a customizable content builder, complete with a set of frequently used content blocks.",
+    "keywords": [
+        "laravel",
+        "filament",
+        "content-builder"
+    ],
     "type": "library",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "VanOns\\FilamentContentBuilder\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Van Ons",
@@ -16,20 +16,33 @@
     ],
     "require": {
         "php": "^8.2",
+        "bensampo/laravel-embed": "^3.1.0",
         "filament/filament": "^4.0|^5.0",
-        "illuminate/contracts": "^9.28|^10.0|^11.0|^12.0|^13.0",
-        "van-ons/filament-field-library": "^2.0.9",
-        "bensampo/laravel-embed": "^3.1.0"
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "van-ons/filament-field-library": "^2.0.9"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.64",
-        "larastan/larastan": "^3.0",
-        "orchestra/testbench": "^10.0"
+        "friendsofphp/php-cs-fixer": "^3.87",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "pestphp/pest": "^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+        "phpstan/phpstan": "^2.1"
     },
     "scripts": {
-        "analyse": "./vendor/bin/phpstan analyse --memory-limit=1G",
-        "format": "./vendor/bin/php-cs-fixer fix",
-        "format:check": "./vendor/bin/php-cs-fixer check"
+        "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
+        "format": "vendor/bin/php-cs-fixer fix",
+        "format:check": "vendor/bin/php-cs-fixer check",
+        "test": "vendor/bin/pest"
+    },
+    "autoload": {
+        "psr-4": {
+            "VanOns\\FilamentContentBuilder\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "repositories": [
         {
@@ -41,12 +54,17 @@
         "laravel": {
             "providers": [
                 "VanOns\\FilamentContentBuilder\\FilamentContentBuilderServiceProvider"
-            ]
-        },
-        "aliases": {
-            "FilamentContentBuilder": "VanOns\\FilamentContentBuilder\\Facade\\FilamentContentBuilder"
+            ],
+            "aliases": {
+                "FilamentContentBuilder": "VanOns\\FilamentContentBuilder\\Facade\\FilamentContentBuilder"
+            }
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }
