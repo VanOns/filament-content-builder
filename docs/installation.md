@@ -6,6 +6,8 @@ Start by installing the package via Composer:
 composer require van-ons/filament-content-builder
 ```
 
+## Publishing
+
 ### Customizing the config
 
 The config file defines which blocks are available in the content builder. Publish it with:
