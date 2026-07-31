@@ -1,6 +1,11 @@
 {
     "name": "van-ons/filament-content-builder",
-    "description": "A package that provides a content builder with a set of frequently used content blocks in Filament.",
+    "description": "A Filament package that adds a customizable content builder, complete with a set of frequently used content blocks.",
+    "keywords": [
+        "laravel",
+        "filament",
+        "content-builder"
+    ],
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -33,17 +38,18 @@
         }
     ],
     "scripts": {
-        "analyse": "vendor/bin/phpstan analyse",
-        "fix": "vendor/bin/php-cs-fixer fix"
+        "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
+        "format": "vendor/bin/php-cs-fixer fix",
+        "format:check": "vendor/bin/php-cs-fixer check"
     },
     "extra": {
         "laravel": {
             "providers": [
                 "VanOns\\FilamentContentBuilder\\FilamentContentBuilderServiceProvider"
-            ]
-        },
-        "aliases": {
-            "FilamentContentBuilder": "VanOns\\FilamentContentBuilder\\Facade\\FilamentContentBuilder"
+            ],
+            "aliases": {
+                "FilamentContentBuilder": "VanOns\\FilamentContentBuilder\\Facade\\FilamentContentBuilder"
+            }
         }
     },
     "minimum-stability": "dev",
