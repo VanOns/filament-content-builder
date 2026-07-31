@@ -1,6 +1,6 @@
 {
     "name": "van-ons/filament-content-builder",
-    "description": "A package that provides a content builder with a set of frequently used content blocks in Filament.",
+    "description": "A Filament package that adds a customizable content builder, complete with a set of frequently used content blocks.",
     "keywords": [
         "laravel",
         "filament",

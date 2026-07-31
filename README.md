@@ -2,11 +2,12 @@
 
 # Filament Content Builder
 
-[![Tests](https://github.com/VanOns/filament-content-builder/actions/workflows/run-tests.yml/badge.svg)](https://github.com/VanOns/filament-content-builder/actions/workflows/run-tests.yml)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/van-ons/filament-content-builder.svg)](https://packagist.org/packages/van-ons/filament-content-builder)
-[![License](https://img.shields.io/packagist/l/van-ons/filament-content-builder.svg)](LICENSE.md)
+[![Latest version on GitHub](https://img.shields.io/github/release/VanOns/filament-content-builder.svg?style=flat-square)](https://github.com/VanOns/filament-content-builder/releases)
+[![Total downloads](https://img.shields.io/packagist/dt/van-ons/filament-content-builder.svg?style=flat-square)](https://packagist.org/packages/van-ons/filament-content-builder)
+[![GitHub issues](https://img.shields.io/github/issues/VanOns/filament-content-builder?style=flat-square)](https://github.com/VanOns/filament-content-builder/issues)
+[![License](https://img.shields.io/github/license/VanOns/filament-content-builder?style=flat-square)](https://github.com/VanOns/filament-content-builder/blob/main/LICENSE.md)
 
-A content builder field for Filament with a set of basic content blocks. Full control over which blocks to use, with support for creating your own.
+A Filament package that provides a content builder with a set of frequently used content blocks. Full control over which blocks to use, with support for creating your own.
 
 ## Quick start
 
