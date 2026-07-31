@@ -16,10 +16,10 @@
     ],
     "require": {
         "php": "^8.2",
+        "bensampo/laravel-embed": "^3.1.0",
         "filament/filament": "^4.0|^5.0",
         "illuminate/contracts": "^11.0|^12.0|^13.0",
-        "van-ons/filament-field-library": "^2.0.9",
-        "bensampo/laravel-embed": "^3.1.0"
+        "van-ons/filament-field-library": "^2.0.9"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.87",
