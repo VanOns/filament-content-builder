@@ -2,6 +2,12 @@ name: Run tests
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'release/*'
+    paths:
+      - '**/*.php'
   pull_request:
     types: [ opened, synchronize, reopened ]
     branches-ignore:
