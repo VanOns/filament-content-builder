@@ -47,6 +47,12 @@ Please see the [documentation](docs) for detailed information about installation
 
 Please see [Contributing](CONTRIBUTING.md) for more information about how you can contribute.
 
+## Testing
+
+```bash
+composer test
+```
+
 ## Changelog
 
 Please see [Changelog](CHANGELOG.md) for more information about what has changed recently.
