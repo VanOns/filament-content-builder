@@ -61,20 +61,31 @@ it('passes for valid known block', function () {
     expect($errors)->toBeEmpty();
 });
 
-it('fails when data contains keys the block schema does not define', function () {
+it('passes for data holding nested groups from container components', function () {
     $errors = validateBlock(json_encode([
         'type' => 'TextBlock',
-        'data' => ['content' => 'Hello', 'blockIndex' => 1337, 'nested' => true],
+        'data' => [
+            'content' => 'test',
+            'blog_categories' => [],
+            'backgroundColor' => 'primary',
+            'button' => [
+                'url' => null,
+                'use_resource' => false,
+                'new_tab' => false,
+                'anchor' => null,
+                'label' => null,
+                'variant' => 'primary',
+            ],
+        ],
     ]));
 
-    expect($errors)->not->toBeEmpty()
-        ->and($errors[0])->toContain('blockIndex');
+    expect($errors)->toBeEmpty();
 });
 
-it('passes when data contains the settings key', function () {
+it('passes when data carries the keys the package itself injects', function () {
     $errors = validateBlock(json_encode([
         'type' => 'TextBlock',
-        'data' => ['content' => 'Hello', 'settings' => ['foo' => 'bar']],
+        'data' => ['content' => 'Hello', 'blockIndex' => 3, 'nested' => true, 'settings' => ['foo' => 'bar']],
     ]));
 
     expect($errors)->toBeEmpty();

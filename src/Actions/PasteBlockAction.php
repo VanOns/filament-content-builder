@@ -5,7 +5,6 @@ namespace VanOns\FilamentContentBuilder\Actions;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Textarea;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use VanOns\FilamentContentBuilder\FilamentContentBuilder;
 use VanOns\FilamentContentBuilder\Rules\ValidBlockData;
@@ -45,12 +44,9 @@ class PasteBlockAction extends Action
                     return;
                 }
 
-                $class = FilamentContentBuilder::getBlockClass($block['type']);
-                if ($class === null) {
+                if (FilamentContentBuilder::getBlockClass($block['type']) === null) {
                     return;
                 }
-
-                $block['data'] = Arr::only($block['data'], ValidBlockData::allowedKeys($class));
 
                 $component->state([
                     ...$state ?? [],
