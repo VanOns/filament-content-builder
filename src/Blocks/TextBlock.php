@@ -8,9 +8,9 @@ use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 class TextBlock extends Block
 {
-    public string $title;
-    public string $subtitle;
-    public string $content;
+    public ?string $title = null;
+    public ?string $subtitle = null;
+    public ?string $content = null;
 
     public static function title(): string
     {

@@ -45,6 +45,10 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
     {
         $name = Str::studly($this->argument('name'));
 
+        if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $name)) {
+            $this->fail('The name must be a valid PHP class name.');
+        }
+
         if (FileHelper::isReservedWord($name)) {
             $this->fail('The name is a reserved word in PHP.');
         }
@@ -67,6 +71,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
         $this->updateConfigFile($name);
 
         $this->info("Block created successfully at $filePath.");
+        $this->info('View created successfully at ' . FileHelper::blockViewPath($name) . '.');
 
         return self::SUCCESS;
     }
@@ -93,11 +98,28 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
 
         $configPath = config_path('filament-content-builder.php');
         $configContent = File::get($configPath);
+
+        // Class names contain backslashes, which are backreferences in a replacement string.
+        $replacement = str_replace(
+            ['\\', '$'],
+            ['\\\\', '\\$'],
+            "'blocks' => [\n\t\t" . implode(",\n\t\t", $blocks) . ",\n\t],"
+        );
+
         $configContent = preg_replace(
             '/\'blocks\' => \[(.*?)\],/s',
-            "'blocks' => [\n\t\t" . implode(",\n\t\t", $blocks) . ",\n\t],",
-            $configContent
+            $replacement,
+            $configContent,
+            limit: 1,
+            count: $count
         );
+
+        if ($count !== 1) {
+            $this->warn("Could not find the blocks array in $configPath. Add the block manually.");
+
+            return;
+        }
+
         File::put($configPath, $configContent);
 
         $this->info('Block added to config file successfully.');

@@ -3,7 +3,7 @@
      * @var \VanOns\FilamentContentBuilder\Blocks\CtaBlock $block
      */
 
-    $url = $block->url;
+    $url = \VanOns\FilamentContentBuilder\Helpers\UrlHelper::sanitize($block->url);
 @endphp
 
 <section>

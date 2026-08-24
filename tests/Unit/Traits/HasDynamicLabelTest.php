@@ -134,3 +134,16 @@ it('getLabel returns just title when label is empty', function () {
 
     expect($block::getLabel(['title' => '']))->toBe($block::title());
 });
+
+it('does not resurrect tags hidden behind entities', function () {
+    $block = new class ([]) extends Block {
+        public static ?string $labelField = 'title';
+
+        public static function schema(): array
+        {
+            return [];
+        }
+    };
+
+    expect($block::label(['title' => '&lt;script&gt;alert(1)&lt;/script&gt;']))->toBe('alert(1)');
+});
