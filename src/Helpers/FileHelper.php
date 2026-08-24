@@ -48,11 +48,14 @@ class FileHelper
             File::makeDirectory($dir, recursive: true);
         }
 
-        $file = static::pathWithin($dir, Str::kebab($name) . '.blade.php');
-
-        Stubs::createFromStub($file, 'block-view', [
+        Stubs::createFromStub(static::blockViewPath($name), 'block-view', [
             'class' => $name,
         ]);
+    }
+
+    public static function blockViewPath(string $name): string
+    {
+        return static::pathWithin(resource_path('views/blocks'), Str::kebab($name) . '.blade.php');
     }
 
     protected static function pathWithin(string $dir, string $filename): string

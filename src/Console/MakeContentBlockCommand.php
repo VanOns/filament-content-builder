@@ -71,6 +71,7 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
         $this->updateConfigFile($name);
 
         $this->info("Block created successfully at {$filePath}.");
+        $this->info('View created successfully at ' . FileHelper::blockViewPath($name) . '.');
 
         return self::SUCCESS;
     }
