@@ -17,7 +17,9 @@
     @if(!empty($items = $block->items))
         <{{ $listEl }}>
             @foreach($items as $item)
-                <li>{{ $item['text'] }}</li>
+                @continue(!is_array($item))
+
+                <li>{{ $item['text'] ?? '' }}</li>
             @endforeach
         </{{ $listEl }}>
     @endif

@@ -1,5 +1,6 @@
 <?php
 
+use VanOns\FilamentContentBuilder\Blocks\ListBlock;
 use VanOns\FilamentContentBuilder\Blocks\TextBlock;
 
 it('returns class basename as type', function () {
@@ -66,4 +67,36 @@ it('nested can be set via data', function () {
 
 it('package block view uses filament-content-builder namespace', function () {
     expect(TextBlock::view())->toStartWith('filament-content-builder::blocks.');
+});
+
+it('leaves a property at its default when stored data is null', function () {
+    $block = new TextBlock(['content' => null]);
+
+    expect($block->content)->toBeNull();
+});
+
+it('leaves a property at its default when stored data has the wrong type', function () {
+    $block = new TextBlock(['content' => ['not', 'a', 'string']]);
+
+    expect($block->content)->toBeNull();
+});
+
+it('leaves array properties at their default when stored data is not an array', function () {
+    $block = new ListBlock(['items' => 'nope']);
+
+    expect($block->items)->toBe([]);
+});
+
+it('still hydrates properties when stored data has a usable type', function () {
+    $block = new ListBlock(['title' => 'Title', 'type' => 'ordered', 'items' => [['text' => 'a']]]);
+
+    expect($block->title)->toBe('Title')
+        ->and($block->type)->toBe('ordered')
+        ->and($block->items)->toBe([['text' => 'a']]);
+});
+
+it('does not hydrate blockIndex from a non-numeric value', function () {
+    $block = new TextBlock(['blockIndex' => 'evil']);
+
+    expect($block->blockIndex)->toBe(0);
 });

@@ -60,3 +60,22 @@ it('passes for valid known block', function () {
 
     expect($errors)->toBeEmpty();
 });
+
+it('fails when data contains keys the block schema does not define', function () {
+    $errors = validateBlock(json_encode([
+        'type' => 'TextBlock',
+        'data' => ['content' => 'Hello', 'blockIndex' => 1337, 'nested' => true],
+    ]));
+
+    expect($errors)->not->toBeEmpty()
+        ->and($errors[0])->toContain('blockIndex');
+});
+
+it('passes when data contains the settings key', function () {
+    $errors = validateBlock(json_encode([
+        'type' => 'TextBlock',
+        'data' => ['content' => 'Hello', 'settings' => ['foo' => 'bar']],
+    ]));
+
+    expect($errors)->toBeEmpty();
+});

@@ -6,6 +6,6 @@
 
 <section>
     @if(!empty($content = $block->content))
-        <div>{!! $content !!}</div>
-    @endisset
+        <div>{!! \Illuminate\Support\Str::sanitizeHtml($content) !!}</div>
+    @endif
 </section>

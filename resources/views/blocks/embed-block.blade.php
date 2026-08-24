@@ -5,7 +5,7 @@
 @endphp
 
 <section>
-    @if(!empty($url = $block->url))
+    @if($url = $block->embeddableUrl())
         <x-embed :url="$url" />
     @endif
 </section>
