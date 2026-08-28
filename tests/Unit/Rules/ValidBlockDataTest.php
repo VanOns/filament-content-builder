@@ -60,3 +60,33 @@ it('passes for valid known block', function () {
 
     expect($errors)->toBeEmpty();
 });
+
+it('passes for data holding nested groups from container components', function () {
+    $errors = validateBlock(json_encode([
+        'type' => 'TextBlock',
+        'data' => [
+            'content' => 'test',
+            'blog_categories' => [],
+            'backgroundColor' => 'primary',
+            'button' => [
+                'url' => null,
+                'use_resource' => false,
+                'new_tab' => false,
+                'anchor' => null,
+                'label' => null,
+                'variant' => 'primary',
+            ],
+        ],
+    ]));
+
+    expect($errors)->toBeEmpty();
+});
+
+it('passes when data carries the keys the package itself injects', function () {
+    $errors = validateBlock(json_encode([
+        'type' => 'TextBlock',
+        'data' => ['content' => 'Hello', 'blockIndex' => 3, 'nested' => true, 'settings' => ['foo' => 'bar']],
+    ]));
+
+    expect($errors)->toBeEmpty();
+});

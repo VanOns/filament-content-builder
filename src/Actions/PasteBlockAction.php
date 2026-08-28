@@ -6,6 +6,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Str;
+use VanOns\FilamentContentBuilder\FilamentContentBuilder;
 use VanOns\FilamentContentBuilder\Rules\ValidBlockData;
 
 class PasteBlockAction extends Action
@@ -39,7 +40,11 @@ class PasteBlockAction extends Action
             ->action(function (Builder $component, array $data, ?array $state) {
                 $block = json_decode($data['paste'], true);
 
-                if (! is_array($block)) {
+                if (!is_array($block) || !is_string($block['type'] ?? null) || !is_array($block['data'] ?? null)) {
+                    return;
+                }
+
+                if (FilamentContentBuilder::getBlockClass($block['type']) === null) {
                     return;
                 }
 

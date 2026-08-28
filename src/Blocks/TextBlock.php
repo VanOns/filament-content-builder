@@ -7,7 +7,7 @@ use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 class TextBlock extends Block
 {
-    public string $content;
+    public ?string $content = null;
 
     public static function title(): string
     {

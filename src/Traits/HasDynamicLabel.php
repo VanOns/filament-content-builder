@@ -23,7 +23,7 @@ trait HasDynamicLabel
         }
 
         return !empty($label = Arr::get($state, static::getLabelField())) && is_string($label)
-            ? html_entity_decode(strip_tags($label))
+            ? strip_tags(html_entity_decode($label))
             : null;
     }
 
