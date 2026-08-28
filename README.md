@@ -1,4 +1,4 @@
-<p align="center"><img src="art/social-card.png" alt="Social card of Filament Content Builder"></p>
+<p align="center" class="filament-hidden"><img src="art/social-card.png" alt="Social card of Filament Content Builder"></p>
 
 # Filament Content Builder
 
@@ -7,7 +7,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/VanOns/filament-content-builder?style=flat-square)](https://github.com/VanOns/filament-content-builder/issues)
 [![License](https://img.shields.io/github/license/VanOns/filament-content-builder?style=flat-square)](https://github.com/VanOns/filament-content-builder/blob/release/v1/LICENSE.md)
 
-A Filament package that provides a content builder with a set of frequently used content blocks. Full control over which blocks to use, with support for creating your own.
+Add a customizable content builder to your Filament admin panel, complete with a set of frequently used content blocks.
 
 ## Quick start
 
