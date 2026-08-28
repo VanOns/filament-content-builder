@@ -4,6 +4,8 @@ namespace VanOns\FilamentContentBuilder\Blocks\Contracts;
 
 use Filament\Forms\Components\Component;
 use Illuminate\Support\Str;
+use ReflectionNamedType;
+use ReflectionProperty;
 use RuntimeException;
 use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
 use VanOns\FilamentContentBuilder\Traits\CanBeNested;
@@ -29,10 +31,41 @@ abstract class Block
     public function __construct(public array $data)
     {
         foreach ($this->data as $key => $value) {
-            if (property_exists($this, $key)) {
+            if (property_exists($this, $key) && static::acceptsPropertyValue($key, $value)) {
                 $this->{$key} = $value;
             }
         }
+    }
+
+    // Stored data can be null or predate the current schema, so keep the default instead.
+    protected static function acceptsPropertyValue(string $property, mixed $value): bool
+    {
+        static $types = [];
+
+        $key = static::class . '::' . $property;
+
+        if (!array_key_exists($key, $types)) {
+            $types[$key] = (new ReflectionProperty(static::class, $property))->getType();
+        }
+
+        $type = $types[$key];
+
+        if (!$type instanceof ReflectionNamedType) {
+            return true;
+        }
+
+        if ($value === null) {
+            return $type->allowsNull();
+        }
+
+        return match ($type->getName()) {
+            'string' => is_string($value) || is_numeric($value),
+            'int' => is_int($value) || (is_string($value) && ctype_digit($value)),
+            'float' => is_float($value) || is_int($value) || is_numeric($value),
+            'bool' => is_bool($value) || in_array($value, [0, 1, '0', '1'], true),
+            'array' => is_array($value),
+            default => true,
+        };
     }
 
     public function render(): string

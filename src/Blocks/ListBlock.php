@@ -9,9 +9,9 @@ use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 class ListBlock extends Block
 {
-    public string $title;
-    public string $type;
-    public array $items;
+    public ?string $title = null;
+    public ?string $type = null;
+    public array $items = [];
 
     public static function title(): string
     {

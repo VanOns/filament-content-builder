@@ -4,6 +4,7 @@ namespace VanOns\FilamentContentBuilder\Helpers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use VanOns\FilamentContentBuilder\Stubs\Stubs;
 
 class FileHelper
@@ -28,7 +29,7 @@ class FileHelper
             File::makeDirectory($dir, recursive: true);
         }
 
-        $file = "$dir/$name.php";
+        $file = static::pathWithin($dir, "$name.php");
 
         Stubs::createFromStub($file, 'block', [
             'class' => $name,
@@ -47,12 +48,26 @@ class FileHelper
             File::makeDirectory($dir, recursive: true);
         }
 
-        $filename = Str::kebab($name);
-        $file = "$dir/$filename.blade.php";
-
-        Stubs::createFromStub($file, 'block-view', [
+        Stubs::createFromStub(static::blockViewPath($name), 'block-view', [
             'class' => $name,
         ]);
+    }
+
+    public static function blockViewPath(string $name): string
+    {
+        return static::pathWithin(resource_path('views/blocks'), Str::kebab($name) . '.blade.php');
+    }
+
+    protected static function pathWithin(string $dir, string $filename): string
+    {
+        $dir = rtrim($dir, '/');
+        $path = "$dir/$filename";
+
+        if (dirname($path) !== $dir || str_contains($filename, '/') || str_contains($filename, '\\')) {
+            throw new InvalidArgumentException("Refusing to write [$filename] outside of [$dir].");
+        }
+
+        return $path;
     }
 
     public static function isReservedWord(string $name): bool
