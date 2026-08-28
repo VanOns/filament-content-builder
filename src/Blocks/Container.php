@@ -12,7 +12,7 @@ class Container extends Block
 
     public static function title(): string
     {
-        return __('blocks.container');
+        return __('filament-content-builder-lang::blocks.container');
     }
 
     public static function icon(): ?string
@@ -24,7 +24,7 @@ class Container extends Block
     {
         return [
             ContentBlocksRenderer::make('content')
-                ->label(__('admin/field.content'))
+                ->label(__('filament-content-builder-lang::fields.content'))
                 ->blockPickerColumns(1)
                 ->contentBlocks(fn () => FilamentContentBuilder::getContainerBlocks()),
         ];
