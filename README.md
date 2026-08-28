@@ -1,4 +1,4 @@
-<p align="center"><img src="art/social-card.png" alt="Social card of Filament Content Builder"></p>
+<p align="center" class="filament-hidden"><img src="art/social-card.png" alt="Social card of Filament Content Builder"></p>
 
 # Filament Content Builder
 
@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/github/license/VanOns/filament-content-builder?style=flat-square)](https://github.com/VanOns/filament-content-builder/blob/main/LICENSE.md)
 [![Plumb score](https://img.shields.io/badge/dynamic/regex?url=https%3A%2F%2Fplumbphp.dev%2Fbadges%2Fvan-ons%2Ffilament-content-builder%2Fcomposite.svg&search=%3Ctitle%3Eplumb%3A%5Cs%2A%28%5B%5E%3C%5D%2B%29%3C&replace=%241&label=plumb&style=flat-square)](https://plumbphp.dev/van-ons/filament-content-builder)
 
-A Filament package that provides a content builder with a set of frequently used content blocks. Full control over which blocks to use, with support for creating your own.
+Add a customizable content builder to your Filament admin panel, complete with a set of frequently used content blocks.
 
 ## Quick start
 
