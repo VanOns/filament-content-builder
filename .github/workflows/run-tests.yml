@@ -53,7 +53,7 @@ jobs:
 
       - name: 🔑 Configure Composer authentication
         run: |
-          composer config github-oauth.github.com ${{ secrets.TOKEN_GITHUB }}
+          composer config github-oauth.github.com ${{ secrets.PUBLIC_TOKEN_GITHUB }}
 
       - name: ⬇️Install Composer dependencies
         run: |
@@ -80,7 +80,7 @@ jobs:
 
       - name: 🔑 Configure Composer authentication
         run: |
-          composer config github-oauth.github.com ${{ secrets.TOKEN_GITHUB }}
+          composer config github-oauth.github.com ${{ secrets.PUBLIC_TOKEN_GITHUB }}
 
       - name: ⬇️Install Composer dependencies
         run: composer validate --no-check-publish && composer install --prefer-dist --no-progress --no-ansi --no-interaction --optimize-autoloader
