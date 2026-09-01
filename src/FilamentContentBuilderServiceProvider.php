@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use VanOns\FilamentContentBuilder\Console\MakeContentBlockCommand;
 use VanOns\FilamentContentBuilder\Console\MakeTemplateCommand;
+use VanOns\FilamentContentBuilder\Templates\TemplateService;
 use VanOns\FilamentContentBuilder\View\Components\Block;
 
 class FilamentContentBuilderServiceProvider extends ServiceProvider
@@ -68,5 +69,6 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind('filament-content-builder', FilamentContentBuilder::class);
+        $this->app->singleton(TemplateService::class);
     }
 }

@@ -8,6 +8,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use VanOns\FilamentContentBuilder\Fields\TemplateFields;
 
 abstract class Template
 {
@@ -37,26 +38,31 @@ abstract class Template
         return Str::of(static::type())->replace('-', ' ')->title()->toString();
     }
 
+    public static function fields(string $prefix = 'template_fields.'): array
+    {
+        return [];
+    }
+
+    /**
+     * @deprecated Use `TemplateFields::make()` instead.
+     */
+    public static function group(string $fieldName = 'template'): Group
+    {
+        return TemplateFields::make()
+            ->templateField($fieldName)
+            ->only(static::type());
+    }
+
+    /**
+     * @deprecated Use `TemplateFields::make()->fieldset()` instead.
+     */
     public static function fieldSet(string $fieldName = 'template'): Fieldset
     {
         return Fieldset::make(static::type())
             ->label(static::name())
-            ->schema(static::fields())
-            ->visible(fn (Get $get): bool => $get($fieldName) === static::type() && !empty(static::fields()))
+            ->schema([static::group($fieldName)])
+            ->visible(fn (Get $get): bool => $get($fieldName) === static::type())
             ->columns(1);
-    }
-
-    public static function group(string $fieldName = 'template'): Group
-    {
-        return Group::make()
-            ->schema(static::fields())
-            ->visible(fn (Get $get): bool => $get($fieldName) === static::type() && !empty(static::fields()))
-            ->columns(1);
-    }
-
-    public static function fields(string $prefix = 'template_fields.'): array
-    {
-        return [];
     }
 
     public function render(Model $model): View
