@@ -8,7 +8,6 @@ use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use VanOns\FilamentContentBuilder\Fields\TemplateFields;
 
 abstract class Template
 {
@@ -48,9 +47,10 @@ abstract class Template
      */
     public static function group(string $fieldName = 'template'): Group
     {
-        return TemplateFields::make()
-            ->templateField($fieldName)
-            ->only(static::type());
+        return Group::make()
+            ->schema(static::fields())
+            ->visible(fn (Get $get): bool => $get($fieldName) === static::type() && !empty(static::fields()))
+            ->columns(1);
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class Template
     {
         return Fieldset::make(static::type())
             ->label(static::name())
-            ->schema([static::group($fieldName)])
+            ->schema(static::fields())
             ->visible(fn (Get $get): bool => $get($fieldName) === static::type() && !empty(static::fields()))
             ->columns(1);
     }

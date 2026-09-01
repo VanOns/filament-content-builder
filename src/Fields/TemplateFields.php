@@ -18,11 +18,6 @@ class TemplateFields extends Group
 
     protected bool | Closure $isFieldset = false;
 
-    /**
-     * @var array<string> | Closure
-     */
-    protected array | Closure $only = [];
-
     protected ?string $cachedTemplateType = null;
 
     protected function setUp(): void
@@ -63,24 +58,6 @@ class TemplateFields extends Group
         return (bool) $this->evaluate($this->isFieldset);
     }
 
-    /**
-     * Only render the fields of the given templates, nothing for the others.
-     */
-    public function only(string | array | Closure $types): static
-    {
-        $this->only = is_string($types) ? [$types] : $types;
-
-        return $this;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getOnly(): array
-    {
-        return (array) $this->evaluate($this->only);
-    }
-
     public function getTemplateType(): ?string
     {
         $type = $this->evaluate(fn (Get $get): mixed => $get($this->getTemplateField()));
@@ -98,13 +75,6 @@ class TemplateFields extends Group
      */
     public function getTemplateFields(): array
     {
-        $type = $this->getTemplateType();
-        $only = $this->getOnly();
-
-        if (!empty($only) && !in_array($type, $only, true)) {
-            return [];
-        }
-
         $template = $this->getTemplate();
         $fields = $template ? $template::fields() : [];
 
@@ -121,29 +91,11 @@ class TemplateFields extends Group
     }
 
     /**
-     * @return array<Schema>
-     */
-    public function getDefaultChildSchemas(): array
-    {
-        $this->cachedTemplateType = $this->getTemplateType();
-
-        return parent::getDefaultChildSchemas();
-    }
-
-    /**
-     * Rebuild the child schema when another template is selected.
-     */
-    protected function areCachedDefaultChildSchemasFresh(): bool
-    {
-        return $this->cachedTemplateType === $this->getTemplateType();
-    }
-
-    /**
      * @param array-key | null $key
      */
     public function getChildSchema($key = null): ?Schema
     {
-        $this->clearStaleChildSchemas();
+        $this->refreshTemplateType();
 
         return parent::getChildSchema($key);
     }
@@ -153,23 +105,28 @@ class TemplateFields extends Group
      */
     public function getChildSchemas(bool $withHidden = false): array
     {
-        $this->clearStaleChildSchemas();
+        $this->refreshTemplateType();
 
         return parent::getChildSchemas($withHidden);
     }
 
     /**
-     * Not every Filament version has the clearing method, but those versions do
-     * not cache child schemas either, so skipping it is safe.
+     * Drop the cached fields when another template is selected. Not every
+     * Filament version has the clearing method, but those versions do not cache
+     * child schemas either, so skipping it is safe.
      */
-    protected function clearStaleChildSchemas(): void
+    protected function refreshTemplateType(): void
     {
-        /** @phpstan-ignore function.alreadyNarrowedType */
-        if (!method_exists($this, 'clearCachedDefaultChildSchemas')) {
+        $type = $this->getTemplateType();
+
+        if ($type === $this->cachedTemplateType) {
             return;
         }
 
-        if (!$this->areCachedDefaultChildSchemasFresh()) {
+        $this->cachedTemplateType = $type;
+
+        /** @phpstan-ignore function.alreadyNarrowedType */
+        if (method_exists($this, 'clearCachedDefaultChildSchemas')) {
             $this->clearCachedDefaultChildSchemas();
         }
     }
