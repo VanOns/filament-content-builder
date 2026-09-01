@@ -139,6 +139,42 @@ class TemplateFields extends Group
     }
 
     /**
+     * @param array-key | null $key
+     */
+    public function getChildSchema($key = null): ?Schema
+    {
+        $this->clearStaleChildSchemas();
+
+        return parent::getChildSchema($key);
+    }
+
+    /**
+     * @return array<Schema>
+     */
+    public function getChildSchemas(bool $withHidden = false): array
+    {
+        $this->clearStaleChildSchemas();
+
+        return parent::getChildSchemas($withHidden);
+    }
+
+    /**
+     * Not every Filament version has the clearing method, but those versions do
+     * not cache child schemas either, so skipping it is safe.
+     */
+    protected function clearStaleChildSchemas(): void
+    {
+        /** @phpstan-ignore function.alreadyNarrowedType */
+        if (!method_exists($this, 'clearCachedDefaultChildSchemas')) {
+            return;
+        }
+
+        if (!$this->areCachedDefaultChildSchemasFresh()) {
+            $this->clearCachedDefaultChildSchemas();
+        }
+    }
+
+    /**
      * Whether any field of the selected template is missing from the state.
      */
     public function needsStateHydration(): bool
@@ -146,34 +182,8 @@ class TemplateFields extends Group
         $state = (array) $this->getLivewire();
 
         foreach ($this->getChildSchemas(withHidden: true) as $schema) {
-            if ($this->schemaMissesState($schema, $state)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array<string, mixed> $state
-     */
-    protected function schemaMissesState(Schema $schema, array $state): bool
-    {
-        foreach ($schema->getComponents(withActions: false, withHidden: true) as $component) {
-            if (!$component instanceof Component) {
-                continue;
-            }
-
-            if ($component->hasStatePath()) {
-                if (!Arr::has($state, $component->getStatePath())) {
-                    return true;
-                }
-
-                continue;
-            }
-
-            foreach ($component->getChildSchemas(withHidden: true) as $childSchema) {
-                if ($this->schemaMissesState($childSchema, $state)) {
+            foreach ($schema->getFlatFields(withHidden: true) as $field) {
+                if (!Arr::has($state, $field->getStatePath())) {
                     return true;
                 }
             }

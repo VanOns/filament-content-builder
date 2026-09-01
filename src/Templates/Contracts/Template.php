@@ -61,7 +61,7 @@ abstract class Template
         return Fieldset::make(static::type())
             ->label(static::name())
             ->schema([static::group($fieldName)])
-            ->visible(fn (Get $get): bool => $get($fieldName) === static::type())
+            ->visible(fn (Get $get): bool => $get($fieldName) === static::type() && !empty(static::fields()))
             ->columns(1);
     }
 
