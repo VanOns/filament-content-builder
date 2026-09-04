@@ -3,6 +3,7 @@
 namespace VanOns\FilamentContentBuilder\Traits;
 
 use Filament\Forms\Components\Field;
+use Filament\Schemas\Schema;
 use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 /**
@@ -15,8 +16,13 @@ trait CanBeFixed
      */
     public static function getFields(string $prefix = ''): array
     {
-        /** @var Field[] $schema */
         $schema = static::schema();
+
+        if ($schema instanceof Schema) {
+            $schema = $schema->getComponents();
+        }
+
+        /** @var Field[] $schema */
 
         foreach ($schema as $field) {
             $name = $prefix . '.' . $field->getName();
