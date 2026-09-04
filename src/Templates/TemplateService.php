@@ -8,6 +8,10 @@ use VanOns\FilamentContentBuilder\Templates\Contracts\Template;
 
 class TemplateService
 {
+    protected ?Collection $templates = null;
+
+    protected ?array $options = null;
+
     public function render($item): mixed
     {
         return $this->resolve($item->template)?->render($item);
@@ -26,6 +30,10 @@ class TemplateService
 
     public function templates(): Collection
     {
+        if ($this->templates !== null) {
+            return $this->templates;
+        }
+
         $classes = [];
 
         foreach (config('filament-content-builder.template_directories') as $dir) {
@@ -37,19 +45,33 @@ class TemplateService
             }
         }
 
-        return collect($classes);
+        return $this->templates = collect($classes);
     }
 
     public function options(): array
     {
-        return $this->templates()->mapWithKeys(fn (string $template) => [$template::type() => $template::name()])->toArray();
+        return $this->options ??= $this->templates()->mapWithKeys(fn (string $template) => [$template::type() => $template::name()])->toArray();
     }
 
+    /**
+     * The type a form selects when no template is set.
+     */
+    public function defaultType(): ?string
+    {
+        return array_key_first($this->options());
+    }
+
+    /**
+     * @deprecated Use `TemplateFields::make()->fieldset()` instead.
+     */
     public function templateFieldSets(): array
     {
         return $this->templates()->mapWithKeys(fn (string $template) => [$template::type() => $template::fieldSet()])->toArray();
     }
 
+    /**
+     * @deprecated Use `TemplateFields::make()` instead.
+     */
     public function templateGroups(): array
     {
         return $this->templates()->mapWithKeys(fn (string $template) => [$template::type() => $template::group()])->toArray();
