@@ -68,5 +68,8 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind('filament-content-builder', FilamentContentBuilder::class);
+
+        // Scoped so repeated calls within one request share the computed usage.
+        $this->app->scoped(Usage\BlockUsageService::class);
     }
 }

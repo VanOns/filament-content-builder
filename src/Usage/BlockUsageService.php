@@ -4,16 +4,20 @@ namespace VanOns\FilamentContentBuilder\Usage;
 
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Routing\Exceptions\UrlGenerationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 use VanOns\FilamentContentBuilder\FilamentContentBuilder;
 
 class BlockUsageService
 {
     /**
-     * @var array<class-string, class-string|false>
+     * @var array<class-string<Model>, class-string|false>
      */
     protected array $resources = [];
+
+    protected ?array $computed = null;
 
     /**
      * @return array<class-string<Model>, array{columns: array<string>, title_attribute: ?string}>
@@ -48,17 +52,20 @@ class BlockUsageService
      */
     public function getUsage(): array
     {
-        $ttl = config('filament-content-builder.usage.cache');
+        return $this->computed ??= $this->isCachingEnabled()
+            ? Cache::remember($this->getCacheKey(), config('filament-content-builder.usage.cache'), fn () => $this->computeUsage())
+            : $this->computeUsage();
+    }
 
-        if (!$ttl) {
-            return $this->computeUsage();
-        }
-
-        return Cache::remember($this->getCacheKey(), $ttl, fn () => $this->computeUsage());
+    public function isCachingEnabled(): bool
+    {
+        return (bool) config('filament-content-builder.usage.cache');
     }
 
     public function clearCache(): void
     {
+        $this->computed = null;
+
         Cache::forget($this->getCacheKey());
     }
 
@@ -70,24 +77,13 @@ class BlockUsageService
         $usage = [];
 
         foreach (FilamentContentBuilder::getBlocks() as $block) {
-            $usage[$block::type()] = [
-                'type' => $block::type(),
-                'title' => $block::title(),
-                'icon' => $block::icon(),
-                'registered' => true,
-                'total' => 0,
-                'records' => [],
-            ];
+            $usage[$block::type()] = $this->makeRow($block::type(), $block);
         }
 
         foreach ($this->getSources() as $model => $source) {
-            $query = $model::query();
+            $source['model_label'] = $this->getModelLabel($model);
 
-            if ($columns = $this->getSelectColumns($model, $source)) {
-                $query->select($columns);
-            }
-
-            $query->chunkById(100, function (Collection $records) use (&$usage, $source) {
+            $model::query()->chunkById(500, function (Collection $records) use (&$usage, $source) {
                 foreach ($records as $record) {
                     $this->collectRecordUsage($record, $source, $usage);
                 }
@@ -103,19 +99,15 @@ class BlockUsageService
         return $usage;
     }
 
-    /**
-     * @return array{type: string, title: string, icon: ?string, registered: bool, total: int, records: array, records_count: int}
-     */
-    public function getUsageFor(string $type): array
+    protected function makeRow(string $type, Block|string|null $block = null): array
     {
-        return $this->getUsage()[$type] ?? [
+        return [
             'type' => $type,
-            'title' => $type,
-            'icon' => null,
-            'registered' => false,
+            'title' => $block ? $block::title() : $type,
+            'icon' => $block ? $block::icon() : null,
+            'registered' => $block !== null,
             'total' => 0,
             'records' => [],
-            'records_count' => 0,
         ];
     }
 
@@ -127,59 +119,22 @@ class BlockUsageService
             $this->countBlocks($this->getBlockData($record, $column), $counts);
         }
 
+        if ($counts === []) {
+            return;
+        }
+
+        $entry = [
+            'model_label' => $source['model_label'],
+            'title' => $this->getRecordTitle($record, $source['title_attribute']),
+            'url' => $this->getRecordUrl($record),
+        ];
+
         foreach ($counts as $type => $count) {
-            $usage[$type] ??= [
-                'type' => $type,
-                'title' => $type,
-                'icon' => null,
-                'registered' => false,
-                'total' => 0,
-                'records' => [],
-            ];
+            $usage[$type] ??= $this->makeRow($type);
 
             $usage[$type]['total'] += $count;
-            $usage[$type]['records'][] = [
-                'model' => $record->getMorphClass(),
-                'model_label' => str(class_basename($record))->headline()->toString(),
-                'title' => $this->getRecordTitle($record, $source['title_attribute']),
-                'url' => $this->getRecordUrl($record),
-                'count' => $count,
-            ];
+            $usage[$type]['records'][] = [...$entry, 'count' => $count];
         }
-    }
-
-    /**
-     * Limit the query to the columns the usage scan needs. Returns null when
-     * a configured column or title attribute is not a real table column (e.g.
-     * an accessor), in which case the full model is loaded.
-     *
-     * @param class-string<Model> $model
-     * @return ?array<string>
-     */
-    protected function getSelectColumns(string $model, array $source): ?array
-    {
-        $instance = new $model();
-        $available = $instance->getConnection()->getSchemaBuilder()->getColumnListing($instance->getTable());
-
-        $titleAttribute = $source['title_attribute'];
-
-        if ($titleAttribute && !in_array($titleAttribute, $available, true)) {
-            return null;
-        }
-
-        if (array_diff($source['columns'], $available)) {
-            return null;
-        }
-
-        $titleColumns = $titleAttribute
-            ? [$titleAttribute]
-            : array_intersect(['title', 'name', 'label'], $available);
-
-        return array_values(array_unique([
-            $instance->getKeyName(),
-            ...$source['columns'],
-            ...$titleColumns,
-        ]));
     }
 
     protected function getBlockData(Model $record, string $column): array
@@ -244,18 +199,42 @@ class BlockUsageService
         ]));
     }
 
+    /**
+     * @param class-string<Model> $model
+     */
+    protected function getModelLabel(string $model): string
+    {
+        $resource = $this->getResource($model);
+
+        return $resource
+            ? $resource::getTitleCaseModelLabel()
+            : str(class_basename($model))->headline()->toString();
+    }
+
     protected function getRecordUrl(Model $record): ?string
     {
-        $resource = $this->resources[$record::class] ??= Filament::getModelResource($record) ?? false;
+        $resource = $this->getResource($record::class);
 
-        if (!$resource) {
+        if (!$resource || !$resource::hasPage('edit')) {
             return null;
         }
 
         try {
             return $resource::getUrl('edit', ['record' => $record]);
-        } catch (\Throwable) {
+        } catch (UrlGenerationException) {
+            // No URL outside a panel request, e.g. a missing tenant parameter.
             return null;
         }
+    }
+
+    /**
+     * @param class-string<Model> $model
+     * @return class-string|null
+     */
+    protected function getResource(string $model): ?string
+    {
+        $resource = $this->resources[$model] ??= Filament::getModelResource($model) ?? false;
+
+        return $resource ?: null;
     }
 }

@@ -126,9 +126,7 @@ The page is only registered on panels that have the plugin. Configure it per pan
 FilamentContentBuilderPlugin::make()
     // Override the `usage.enabled` config value for this panel:
     ->blockUsage(false)
-    ->blockUsageNavigationGroup('other')
-    ->blockUsageNavigationSort(90)
-    ->blockUsageNavigationIcon('heroicon-o-chart-bar'),
+    ->blockUsageNavigationGroup('other'),
 ```
 
 ### Caching

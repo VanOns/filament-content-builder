@@ -4,6 +4,7 @@ namespace VanOns\FilamentContentBuilder\Pages;
 
 use BackedEnum;
 use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Support\Enums\Width;
 use Filament\Tables\Columns\IconColumn;
@@ -12,7 +13,6 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
-use Throwable;
 use UnitEnum;
 use VanOns\FilamentContentBuilder\FilamentContentBuilderPlugin;
 use VanOns\FilamentContentBuilder\Usage\BlockUsageService;
@@ -23,26 +23,20 @@ class BlockUsage extends Page implements HasTable
 
     protected static ?string $slug = 'block-usage';
 
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
+
     protected string $view = 'filament-content-builder::pages.block-usage';
 
     public static function canAccess(): bool
     {
-        return static::getPlugin()?->isBlockUsageAuthorized() ?? true;
-    }
-
-    public static function getNavigationIcon(): string | BackedEnum | Htmlable | null
-    {
-        return static::getPlugin()?->getBlockUsageNavigationIcon() ?? 'heroicon-o-chart-bar';
+        // Fall back to a plain plugin instance so the config permission still
+        // applies when the page is registered without the plugin.
+        return (static::getPlugin() ?? FilamentContentBuilderPlugin::make())->isBlockUsageAuthorized();
     }
 
     public static function getNavigationGroup(): string | UnitEnum | null
     {
         return static::getPlugin()?->getBlockUsageNavigationGroup();
-    }
-
-    public static function getNavigationSort(): ?int
-    {
-        return static::getPlugin()?->getBlockUsageNavigationSort() ?? parent::getNavigationSort();
     }
 
     public static function getNavigationLabel(): string
@@ -63,7 +57,7 @@ class BlockUsage extends Page implements HasTable
                 ->icon('heroicon-o-arrow-path')
                 ->color('gray')
                 ->action(fn () => app(BlockUsageService::class)->clearCache())
-                ->visible(fn (): bool => (bool) config('filament-content-builder.usage.cache')),
+                ->visible(fn (): bool => app(BlockUsageService::class)->isCachingEnabled()),
         ];
     }
 
@@ -114,11 +108,11 @@ class BlockUsage extends Page implements HasTable
 
     protected static function getPlugin(): ?FilamentContentBuilderPlugin
     {
-        try {
-            $plugin = filament('filament-content-builder');
-        } catch (Throwable) {
+        if (!Filament::getCurrentPanel()?->hasPlugin('filament-content-builder')) {
             return null;
         }
+
+        $plugin = filament('filament-content-builder');
 
         return $plugin instanceof FilamentContentBuilderPlugin ? $plugin : null;
     }

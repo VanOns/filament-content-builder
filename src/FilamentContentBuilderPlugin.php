@@ -2,7 +2,6 @@
 
 namespace VanOns\FilamentContentBuilder;
 
-use BackedEnum;
 use Closure;
 use Filament\Contracts\Plugin;
 use Filament\Facades\Filament;
@@ -21,10 +20,6 @@ class FilamentContentBuilderPlugin implements Plugin
     protected ?Closure $blockUsageAuthorization = null;
 
     protected string | UnitEnum | null $blockUsageNavigationGroup = null;
-
-    protected ?int $blockUsageNavigationSort = null;
-
-    protected string | BackedEnum | null $blockUsageNavigationIcon = null;
 
     public static function make(): static
     {
@@ -57,20 +52,6 @@ class FilamentContentBuilderPlugin implements Plugin
     public function blockUsageNavigationGroup(string | UnitEnum | null $group): static
     {
         $this->blockUsageNavigationGroup = $group;
-
-        return $this;
-    }
-
-    public function blockUsageNavigationSort(?int $sort): static
-    {
-        $this->blockUsageNavigationSort = $sort;
-
-        return $this;
-    }
-
-    public function blockUsageNavigationIcon(string | BackedEnum | null $icon): static
-    {
-        $this->blockUsageNavigationIcon = $icon;
 
         return $this;
     }
@@ -113,15 +94,5 @@ class FilamentContentBuilderPlugin implements Plugin
     public function getBlockUsageNavigationGroup(): string | UnitEnum | null
     {
         return $this->blockUsageNavigationGroup;
-    }
-
-    public function getBlockUsageNavigationSort(): ?int
-    {
-        return $this->blockUsageNavigationSort;
-    }
-
-    public function getBlockUsageNavigationIcon(): string | BackedEnum | null
-    {
-        return $this->blockUsageNavigationIcon;
     }
 }
