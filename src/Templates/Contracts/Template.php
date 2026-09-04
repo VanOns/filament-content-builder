@@ -37,15 +37,14 @@ abstract class Template
         return Str::of(static::type())->replace('-', ' ')->title()->toString();
     }
 
-    public static function fieldSet(string $fieldName = 'template'): Fieldset
+    public static function fields(string $prefix = 'template_fields.'): array
     {
-        return Fieldset::make(static::type())
-            ->label(static::name())
-            ->schema(static::fields())
-            ->visible(fn (Get $get): bool => $get($fieldName) === static::type() && !empty(static::fields()))
-            ->columns(1);
+        return [];
     }
 
+    /**
+     * @deprecated Use `TemplateFields::make()` instead.
+     */
     public static function group(string $fieldName = 'template'): Group
     {
         return Group::make()
@@ -54,9 +53,16 @@ abstract class Template
             ->columns(1);
     }
 
-    public static function fields(string $prefix = 'template_fields.'): array
+    /**
+     * @deprecated Use `TemplateFields::make()->fieldset()` instead.
+     */
+    public static function fieldSet(string $fieldName = 'template'): Fieldset
     {
-        return [];
+        return Fieldset::make(static::type())
+            ->label(static::name())
+            ->schema(static::fields())
+            ->visible(fn (Get $get): bool => $get($fieldName) === static::type() && !empty(static::fields()))
+            ->columns(1);
     }
 
     public function render(Model $model): View

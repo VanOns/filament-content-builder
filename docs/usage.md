@@ -28,6 +28,19 @@ Render the blocks in your Blade view:
 
 All blocks have a `blockIndex` property — a number that increments with each rendered block. Use it for things like staggered animations.
 
+### Deferred loading
+
+On Filament versions that support `Schema::deferLoading()`, you can enable or disable it per block via the static `$deferLoading` property:
+
+```php
+class Hero extends Block
+{
+    public static ?bool $deferLoading = true;
+}
+```
+
+When `null` (the default), Filament's default behaviour is kept. Setting it on a Filament version without `Schema::deferLoading()` throws a `RuntimeException`.
+
 ### Fixed blocks
 
 Fixed blocks are blocks that are fixed to a resource. For example, a hero block.
@@ -172,11 +185,15 @@ This creates a template class in `app/View/Templates`. Use it in a Filament reso
 
 ```php
 use VanOns\FilamentContentBuilder\Fields\Template;
-use VanOns\FilamentContentBuilder\Templates\TemplateService;
+use VanOns\FilamentContentBuilder\Fields\TemplateFields;
 
-...app(TemplateService::class)->templateGroups(),
+TemplateFields::make(),
 
 Template::make('template')
-    ->required()
-    ->live(),
+    ->required(),
 ```
+
+`TemplateFields` renders the fields of the selected template, wherever you place it — the
+`Template` select may sit in a sidebar, after it. Pass `->fieldset()` to wrap them in a fieldset
+labelled with the template name, and `->templateField('layout')` when the select is named
+something other than `template`.
