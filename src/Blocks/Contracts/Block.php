@@ -2,6 +2,7 @@
 
 namespace VanOns\FilamentContentBuilder\Blocks\Contracts;
 
+use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 use ReflectionNamedType;
 use ReflectionProperty;
@@ -22,11 +23,36 @@ abstract class Block
     public static ?string $labelField = null;
 
     /**
+     * When null, Filament's default behaviour is kept.
+     */
+    public static ?bool $deferLoading = null;
+
+    /**
      * @return array<\Filament\Schemas\Components\Component>
      */
     public static function schema(): array
     {
         throw new RuntimeException('Block schema not implemented');
+    }
+
+    public static function getSchema(): array|Schema
+    {
+        if (static::$deferLoading === null) {
+            return static::schema();
+        }
+
+        $schema = Schema::make()->components(static::schema());
+
+        if (!method_exists($schema, 'deferLoading')) {
+            throw new RuntimeException(sprintf(
+                'Unable to set $deferLoading on block [%s]: the installed Filament version does not support Schema::deferLoading().',
+                static::class
+            ));
+        }
+
+        $schema->deferLoading(static::$deferLoading);
+
+        return $schema;
     }
 
     public function __construct(public array $data)
@@ -131,7 +157,7 @@ abstract class Block
         return \Filament\Forms\Components\Builder\Block::make(static::type())
             ->label(fn (mixed $state) => static::getLabel($state) ?? static::title())
             ->icon(fn () => static::icon())
-            ->schema(fn () => static::schema());
+            ->schema(fn (): array|Schema => static::getSchema());
     }
 
     /**

@@ -28,6 +28,19 @@ Render the blocks in your Blade view:
 
 All blocks have a `blockIndex` property — a number that increments with each rendered block. Use it for things like staggered animations.
 
+### Deferred loading
+
+On Filament versions that support `Schema::deferLoading()`, you can enable or disable it per block via the static `$deferLoading` property:
+
+```php
+class Hero extends Block
+{
+    public static ?bool $deferLoading = true;
+}
+```
+
+When `null` (the default), Filament's default behaviour is kept. Setting it on a Filament version without `Schema::deferLoading()` throws a `RuntimeException`.
+
 ### Fixed blocks
 
 Fixed blocks are blocks that are fixed to a resource. For example, a hero block.
