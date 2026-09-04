@@ -28,21 +28,6 @@ Render the blocks in your Blade view:
 
 All blocks have a `blockIndex` property — a number that increments with each rendered block. Use it for things like staggered animations.
 
-### Custom block schemas
-
-A block's `schema()` method may return an array of components, or a full `Schema` instance when you need to configure schema-level options:
-
-```php
-use Filament\Schemas\Schema;
-
-public static function schema(): array|Schema
-{
-    return Schema::make()->components([
-        // ...
-    ]);
-}
-```
-
 ### Deferred loading
 
 On Filament versions that support `Schema::deferLoading()`, you can enable or disable it per block via the static `$deferLoading` property:

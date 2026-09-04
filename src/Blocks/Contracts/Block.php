@@ -28,24 +28,20 @@ abstract class Block
     public static ?bool $deferLoading = null;
 
     /**
-     * @return array<\Filament\Schemas\Components\Component>|Schema
+     * @return array<\Filament\Schemas\Components\Component>
      */
-    public static function schema(): array|Schema
+    public static function schema(): array
     {
         throw new RuntimeException('Block schema not implemented');
     }
 
     public static function getSchema(): array|Schema
     {
-        $schema = static::schema();
-
         if (static::$deferLoading === null) {
-            return $schema;
+            return static::schema();
         }
 
-        if (is_array($schema)) {
-            $schema = Schema::make()->components($schema);
-        }
+        $schema = Schema::make()->components(static::schema());
 
         if (!method_exists($schema, 'deferLoading')) {
             throw new RuntimeException(sprintf(
