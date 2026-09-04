@@ -81,6 +81,87 @@ The feature is enabled by default. Disable it in the published config:
 'copy_paste' => false,
 ```
 
+## Block usage
+
+Similar to WordPress, you can get an overview of how often and where each block is used.
+
+Enable it in the published config and map each model to the column(s) that store block content:
+
+```php
+// config/filament-content-builder.php
+'usage' => [
+    'enabled' => true,
+
+    'sources' => [
+        // Single column
+        \App\Models\Page::class => 'content',
+        // Multiple columns
+        \App\Models\Post::class => ['content', 'footer'],
+        // With an explicit title attribute
+        \App\Models\Product::class => ['columns' => ['description'], 'title_attribute' => 'name'],
+    ],
+],
+```
+
+Register the plugin in your panel provider:
+
+```php
+use VanOns\FilamentContentBuilder\FilamentContentBuilderPlugin;
+
+$panel->plugins([
+    FilamentContentBuilderPlugin::make()
+        ->blockUsageNavigationGroup('other'),
+]);
+```
+
+This adds a **Block usage** page to the panel, listing every registered block with its total usage count and the number of records it appears in. Nested blocks (e.g. inside containers) are counted as well. The **View usage** action shows the records a block is used in, with a link to the record's edit page when a Filament resource exists for the model.
+
+The record label is resolved from the `title_attribute` if set, falling back to `title`, `name` or `label`.
+
+### Per-panel configuration
+
+The page is only registered on panels that have the plugin. Configure it per panel:
+
+```php
+FilamentContentBuilderPlugin::make()
+    // Override the `usage.enabled` config value for this panel:
+    ->blockUsage(false)
+    ->blockUsageNavigationGroup('other')
+    ->blockUsageNavigationSort(90)
+    ->blockUsageNavigationIcon('heroicon-o-chart-bar'),
+```
+
+### Caching
+
+Usage is computed by scanning all configured sources, and cached for 5 minutes by default:
+
+```php
+'usage' => [
+    'cache' => 300, // seconds, null to disable
+    // ...
+],
+```
+
+The cache is scoped per panel and tenant. A **Refresh** header action appears on the page to recompute on demand.
+
+### Authorization
+
+Set a gate ability in the config to restrict access (hides the navigation item and blocks the page):
+
+```php
+'usage' => [
+    'permission' => 'view block usage',
+    // ...
+],
+```
+
+Or authorize per panel with a closure, which takes precedence over the config permission:
+
+```php
+FilamentContentBuilderPlugin::make()
+    ->authorizeBlockUsageUsing(fn () => auth()->user()->isAdmin()),
+```
+
 ## Templates
 
 Start by creating a new template:
