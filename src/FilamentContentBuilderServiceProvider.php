@@ -70,5 +70,8 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
     {
         $this->app->bind('filament-content-builder', FilamentContentBuilder::class);
         $this->app->singleton(TemplateService::class);
+
+        // Scoped so repeated calls within one request share the computed usage.
+        $this->app->scoped(Usage\BlockUsageService::class);
     }
 }

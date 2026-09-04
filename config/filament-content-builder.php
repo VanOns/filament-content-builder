@@ -64,4 +64,32 @@ return [
 
     'copy_paste' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Block usage
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, the panel plugin registers a page that shows how often and
+    | where each block is used. Map each model to the column(s) that store
+    | block content. Optionally set a `title_attribute` per model, used as the
+    | record label on the usage page. The `permission` is a gate ability that
+    | is checked before granting access to the page. The computed usage is
+    | cached for `cache` seconds; set it to null to disable caching.
+    |
+    */
+
+    'usage' => [
+        'enabled' => false,
+
+        'permission' => null,
+
+        'cache' => 300,
+
+        'sources' => [
+            // \App\Models\Page::class => 'content',
+            // \App\Models\Page::class => ['content', 'footer'],
+            // \App\Models\Post::class => ['columns' => ['content', 'footer'], 'title_attribute' => 'name'],
+        ],
+    ],
+
 ];
