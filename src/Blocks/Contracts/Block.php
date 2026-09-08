@@ -23,7 +23,7 @@ abstract class Block
     public static ?string $labelField = null;
 
     /**
-     * When null, Filament's default behaviour is kept.
+     * When null, the `defer_loading` config value is used.
      */
     public static ?bool $deferLoading = null;
 
@@ -35,22 +35,37 @@ abstract class Block
         throw new RuntimeException('Block schema not implemented');
     }
 
+    /**
+     * When null, Filament's default behaviour is kept.
+     */
+    public static function isDeferLoaded(): ?bool
+    {
+        return static::$deferLoading ?? config('filament-content-builder.defer_loading');
+    }
+
     public static function getSchema(): array|Schema
     {
-        if (static::$deferLoading === null) {
+        $deferLoading = static::isDeferLoaded();
+
+        if ($deferLoading === null) {
             return static::schema();
         }
 
         $schema = Schema::make()->components(static::schema());
 
         if (!method_exists($schema, 'deferLoading')) {
+            // Only throw when the block set it explicitly; the config default is skipped silently.
+            if (static::$deferLoading === null) {
+                return static::schema();
+            }
+
             throw new RuntimeException(sprintf(
                 'Unable to set $deferLoading on block [%s]: the installed Filament version does not support Schema::deferLoading().',
                 static::class
             ));
         }
 
-        $schema->deferLoading(static::$deferLoading);
+        $schema->deferLoading($deferLoading);
 
         return $schema;
     }
