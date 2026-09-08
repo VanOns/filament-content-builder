@@ -26,6 +26,20 @@ return [
         \VanOns\FilamentContentBuilder\Blocks\TextBlock::class,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Defer loading
+    |--------------------------------------------------------------------------
+    |
+    | The default for deferred loading of block schemas. Blocks can override
+    | this via their static `$deferLoading` property. Set to null to keep
+    | Filament's default behaviour. When the installed Filament version does
+    | not support deferred loading, this default is silently ignored.
+    |
+    */
+
+    'defer_loading' => true,
+
     /**
      * Embeddable services, for more info see:
      * https://github.com/BenSampo/laravel-embed

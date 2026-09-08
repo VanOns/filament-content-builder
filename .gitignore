@@ -183,3 +183,6 @@ coverage
 phpstan.neon
 testbench.yaml
 .php-cs-fixer.cache
+
+# Code agent generated files
+/.claude

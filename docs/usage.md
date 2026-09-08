@@ -30,16 +30,18 @@ All blocks have a `blockIndex` property — a number that increments with each r
 
 ### Deferred loading
 
-On Filament versions that support `Schema::deferLoading()`, you can enable or disable it per block via the static `$deferLoading` property:
+On Filament versions that support `Schema::deferLoading()`, block schemas are loaded deferred by default. You can change the default via the `defer_loading` config value, or per block via the static `$deferLoading` property:
 
 ```php
 class Hero extends Block
 {
-    public static ?bool $deferLoading = true;
+    public static ?bool $deferLoading = false;
 }
 ```
 
-When `null` (the default), Filament's default behaviour is kept. Setting it on a Filament version without `Schema::deferLoading()` throws a `RuntimeException`.
+When `$deferLoading` is `null` (the default), the `defer_loading` config value is used. Set the config value to `null` to keep Filament's default behaviour.
+
+On Filament versions without `Schema::deferLoading()`, the config default is silently ignored, but setting `$deferLoading` explicitly on a block throws a `RuntimeException`.
 
 ### Fixed blocks
 
