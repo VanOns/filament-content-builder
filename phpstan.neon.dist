@@ -2,3 +2,12 @@ parameters:
 	level: 5
 	paths:
 		- src
+	ignoreErrors:
+		# The method_exists() guard in Block::getSchema() is always true on
+		# Filament versions that ship Schema::deferLoading(), and a real check
+		# on versions that don't. Skip it either way, without reporting an
+		# unmatched ignore on the older versions.
+		-
+			identifier: function.alreadyNarrowedType
+			path: src/Blocks/Contracts/Block.php
+			reportUnmatched: false
