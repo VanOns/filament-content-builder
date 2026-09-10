@@ -39,7 +39,7 @@ class Hero extends Block
 }
 ```
 
-When `$deferLoading` is `null` (the default), the `defer_loading` config value is used. Set the config value to `null` to keep Filament's default behaviour.
+When `$deferLoading` is `null` (the default), the `defer_loading` config value is used. Set the config value to `null` to keep Filament's default behavior.
 
 On Filament versions without `Schema::deferLoading()`, the config default is silently ignored, but setting `$deferLoading` explicitly on a block throws a `RuntimeException`.
 
@@ -79,6 +79,99 @@ Nested blocks receive the `nested` property, which you can use to conditionally 
 @if ($block->nested)
     {{-- nested-specific output --}}
 @endif
+```
+
+## Customizing blocks
+
+### Title & icon
+
+By default the block title is derived from the class name. Override `title()` and `icon()` to customize how the block appears in the builder:
+
+```php
+public static function title(): string
+{
+    return __('Hero');
+}
+
+public static function icon(): ?string
+{
+    return 'heroicon-o-photo';
+}
+```
+
+### Dynamic labels
+
+Set the static `$labelField` property to include a field's value in the block label, making blocks easier to tell apart in the builder:
+
+```php
+class Hero extends Block
+{
+    public static ?string $labelField = 'heading';
+}
+```
+
+The label becomes the field's value (stripped of HTML, limited to 30 characters), followed by the block title — e.g. `Welcome to our site - Hero`. Nested fields are supported using dot notation, such as `content.heading`.
+
+### Settings
+
+Blocks can have a settings modal, opened via a cog button on the block. Define the settings fields by overriding `settingsSchema()`:
+
+```php
+use Filament\Forms\Components\Toggle;
+
+public static function settingsSchema(): array
+{
+    return [
+        Toggle::make('full_width')
+            ->label(__('Full width')),
+    ];
+}
+```
+
+The button only shows when the schema is non-empty. Settings are stored in the block's data under the `settings` key, and are available in your view via `$block->getSettings()`:
+
+```blade
+@if ($block->getSettings()['full_width'] ?? false)
+    {{-- full-width rendering --}}
+@endif
+```
+
+Further customization:
+
+```php
+// Change the modal title (defaults to "Settings"):
+public static function settingsTitle(): string;
+
+// Change the button icon (defaults to `heroicon-o-cog-6-tooth`):
+public static function settingsIcon(): string;
+
+// Change the key the settings are stored under (defaults to `settings`):
+public static function settingsPrefix(): string;
+
+// Mutate the settings data before it is saved:
+public static function mutateSettingsData(array $data): array;
+```
+
+### Custom view
+
+Views are resolved from `resources/views/blocks/<kebab-case-type>.blade.php` by default. Override `view()` to change this:
+
+```php
+public static function view(): string
+{
+    return 'custom.path.hero';
+}
+```
+
+### Plain text output
+
+Override `toText()` to return a plain-text representation of the block, useful for things like SEO analysis:
+
+```php
+public function toText(): ?string
+{
+    return strip_tags($this->text);
+}
 ```
 
 ## Copy & paste blocks
@@ -197,5 +290,5 @@ Template::make('template')
 
 `TemplateFields` renders the fields of the selected template, wherever you place it — the
 `Template` select may sit in a sidebar, after it. Pass `->fieldset()` to wrap them in a fieldset
-labelled with the template name, and `->templateField('layout')` when the select is named
+labeled with the template name, and `->templateField('layout')` when the select is named
 something other than `template`.
