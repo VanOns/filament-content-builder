@@ -136,6 +136,37 @@ The button only shows when the schema is non-empty. Settings are stored in the b
 @endif
 ```
 
+Settings are also handy for fields that many blocks share. Instead of repeating them in every block's schema, define them once in a base block. For example, an anchor field:
+
+```php
+use Filament\Forms\Components\TextInput;
+use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
+
+abstract class BaseBlock extends Block
+{
+    public static function settingsSchema(): array
+    {
+        return [
+            TextInput::make('anchor')
+                ->label(__('Anchor')),
+        ];
+    }
+}
+```
+
+Every block extending `BaseBlock` now has the anchor setting. A block can add its own settings on top:
+
+```php
+public static function settingsSchema(): array
+{
+    return [
+        ...parent::settingsSchema(),
+        Toggle::make('full_width')
+            ->label(__('Full width')),
+    ];
+}
+```
+
 Further customization:
 
 ```php
