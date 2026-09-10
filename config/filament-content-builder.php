@@ -33,7 +33,7 @@ return [
     |
     | The default for deferred loading of block schemas. Blocks can override
     | this via their static `$deferLoading` property. Set to null to keep
-    | Filament's default behaviour. When the installed Filament version does
+    | Filament's default behavior. When the installed Filament version does
     | not support deferred loading, this default is silently ignored.
     |
     */

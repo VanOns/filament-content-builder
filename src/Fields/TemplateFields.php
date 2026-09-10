@@ -44,7 +44,7 @@ class TemplateFields extends Group
     }
 
     /**
-     * Wrap the fields in a fieldset labelled with the template name.
+     * Wrap the fields in a fieldset labeled with the template name.
      */
     public function fieldset(bool | Closure $condition = true): static
     {
