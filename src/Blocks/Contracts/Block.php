@@ -36,7 +36,7 @@ abstract class Block
     }
 
     /**
-     * When null, Filament's default behaviour is kept.
+     * When null, Filament's default behavior is kept.
      */
     public static function isDeferLoaded(): ?bool
     {
