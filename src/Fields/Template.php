@@ -35,11 +35,11 @@ class Template extends Select
      */
     public function hydrateTemplateFields(): void
     {
-        $state = (array) $this->getLivewire();
-
         foreach ($this->findTemplateFields($this->getRootContainer()) as $fields) {
-            if ($fields->needsStateHydration()) {
-                $fields->hydrateState($state);
+            $missingStatePaths = $fields->missingStatePaths();
+
+            if ($missingStatePaths !== []) {
+                $fields->hydrateStatePartially($missingStatePaths);
             }
         }
     }

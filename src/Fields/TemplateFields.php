@@ -136,16 +136,30 @@ class TemplateFields extends Group
      */
     public function needsStateHydration(): bool
     {
+        return $this->missingStatePaths() !== [];
+    }
+
+    /**
+     * State paths of the selected template's fields that are missing from the
+     * state. Only these may be hydrated: re-hydrating fields that already hold
+     * state re-runs their hydration hooks, which is not idempotent (a repeater
+     * wraps its items again on every run).
+     *
+     * @return list<string>
+     */
+    public function missingStatePaths(): array
+    {
         $state = (array) $this->getLivewire();
+        $paths = [];
 
         foreach ($this->getChildSchemas(withHidden: true) as $schema) {
             foreach ($schema->getFlatFields(withHidden: true) as $field) {
                 if (!Arr::has($state, $field->getStatePath())) {
-                    return true;
+                    $paths[] = $field->getStatePath();
                 }
             }
         }
 
-        return false;
+        return array_values(array_unique($paths));
     }
 }
