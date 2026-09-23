@@ -1,6 +1,6 @@
 ---
 name: create-content-block
-description: Use when the user wants to add a new content block to a project that uses van-ons/filament-content-builder — e.g. "create a hero block", "add a testimonials block", "scaffold a new content block", "add a block to the content builder". Covers the full workflow: scaffold via artisan, define the block schema, wire up the Blade view, optional settings modal, dynamic label, container-block registration, and front-end rendering.
+description: 'Use when the user wants to add a new content block to a project that uses van-ons/filament-content-builder — e.g. "create a hero block", "add a testimonials block", "scaffold a new content block", "add a block to the content builder". Covers the full workflow: scaffold via artisan, define the block schema, wire up the Blade view, optional settings modal, dynamic label, container-block registration, and front-end rendering.'
 ---
 
 # Create a content block
