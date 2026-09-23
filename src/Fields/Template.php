@@ -38,18 +38,9 @@ class Template extends Select
         foreach ($this->findTemplateFields($this->getRootContainer()) as $fields) {
             $missingStatePaths = $fields->missingStatePaths();
 
-            if ($missingStatePaths === []) {
-                continue;
-            }
-
-            if (method_exists($fields, 'hydrateStatePartially')) {
+            if ($missingStatePaths !== []) {
                 $fields->hydrateStatePartially($missingStatePaths);
-
-                continue;
             }
-
-            $state = (array) $this->getLivewire();
-            $fields->hydrateState($state);
         }
     }
 
