@@ -236,6 +236,8 @@ Enable it in the published config and map each model to the column(s) that store
         \App\Models\Page::class => 'content',
         // Multiple columns
         \App\Models\Post::class => ['content', 'footer'],
+        // Nested key inside a JSON column
+        \App\Models\Landing::class => 'template_data.content',
         // With an explicit title attribute
         \App\Models\Product::class => ['columns' => ['description'], 'title_attribute' => 'name'],
     ],
