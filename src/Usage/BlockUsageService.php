@@ -137,12 +137,19 @@ class BlockUsageService
         }
     }
 
+    // Supports nested keys with dot notation, e.g. `template_data.content`.
     protected function getBlockData(Model $record, string $column): array
     {
+        [$column, $path] = array_pad(explode('.', $column, 2), 2, null);
+
         $data = $record->getAttribute($column);
 
         if (is_string($data)) {
             $data = json_decode($data, true);
+        }
+
+        if ($path !== null) {
+            $data = data_get($data, $path);
         }
 
         return is_array($data) ? $data : [];
@@ -175,10 +182,11 @@ class BlockUsageService
         }
     }
 
+    // The configured attribute supports dot notation, e.g. `template_data.title`.
     protected function getRecordTitle(Model $record, ?string $attribute): string
     {
         foreach (array_filter([$attribute, 'title', 'name', 'label']) as $candidate) {
-            $title = $record->getAttribute($candidate);
+            $title = data_get($record, $candidate);
 
             if (is_string($title) && $title !== '') {
                 return $title;
