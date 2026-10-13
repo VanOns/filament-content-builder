@@ -18,8 +18,7 @@
         "php": "^8.2",
         "bensampo/laravel-embed": "^3.1.0",
         "filament/filament": "^4.0|^5.0",
-        "illuminate/contracts": "^11.0|^12.0|^13.0",
-        "van-ons/filament-field-library": "^2.0.9"
+        "illuminate/contracts": "^11.0|^12.0|^13.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.87",
@@ -44,12 +43,6 @@
             "Tests\\": "tests/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/VanOns/filament-field-library"
-        }
-    ],
     "extra": {
         "laravel": {
             "providers": [
