@@ -23,7 +23,6 @@
         "php": "^8.2",
         "filament/filament": "^3.2",
         "illuminate/contracts": "^10.0|^11.0|^12.0",
-        "van-ons/filament-field-library": "^1.0.0",
         "bensampo/laravel-embed": "^3.0"
     },
     "require-dev": {
@@ -32,12 +31,6 @@
         "pestphp/pest": "^2.0|^3.0",
         "phpstan/phpstan": "2.0.x-dev"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/VanOns/filament-field-library"
-        }
-    ],
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
         "format": "vendor/bin/php-cs-fixer fix",
