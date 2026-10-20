@@ -1,4 +1,4 @@
-<p align="center" class="filament-hidden"><img src="art/social-card.png" alt="Social card of Filament Content Builder"></p>
+<p align="center" class="filament-hidden"><img src="https://raw.githubusercontent.com/VanOns/filament-content-builder/release/v1/art/social-card.png" alt="Social card of Filament Content Builder"></p>
 
 # Filament Content Builder
 
@@ -11,7 +11,7 @@ Add a customizable content builder to your Filament admin panel, complete with a
 
 ## Quick start
 
-> For Filament version compatibility, see [Compatibility](docs/compatibility.md).
+> For Filament version compatibility, see [Compatibility](https://github.com/VanOns/filament-content-builder/blob/release/v1/docs/compatibility.md).
 
 ### Installation
 
@@ -41,11 +41,11 @@ Then render the blocks in your Blade view:
 
 ## Documentation
 
-Please see the [documentation](docs) for detailed information about installation and usage.
+Please see the [documentation](https://github.com/VanOns/filament-content-builder/tree/release/v1/docs) for detailed information about installation and usage.
 
 ## Contributing
 
-Please see [Contributing](CONTRIBUTING.md) for more information about how you can contribute.
+Please see [Contributing](https://github.com/VanOns/filament-content-builder/blob/release/v1/CONTRIBUTING.md) for more information about how you can contribute.
 
 ## Testing
 
@@ -55,25 +55,25 @@ composer test
 
 ## Changelog
 
-Please see [Changelog](CHANGELOG.md) for more information about what has changed recently.
+Please see [Changelog](https://github.com/VanOns/filament-content-builder/blob/release/v1/CHANGELOG.md) for more information about what has changed recently.
 
 ## Upgrading
 
-Please see [Upgrading](UPGRADING.md) for more information about how to upgrade.
+Please see [Upgrading](https://github.com/VanOns/filament-content-builder/blob/release/v1/UPGRADING.md) for more information about how to upgrade.
 
 ## Security
 
-Please see [Security](SECURITY.md) for more information about how we deal with security.
+Please see [Security](https://github.com/VanOns/filament-content-builder/blob/release/v1/SECURITY.md) for more information about how we deal with security.
 
 ## Credits
 
 We would like to thank the following contributors for their contributions to this project:
 
-- [All contributors](../../contributors)
+- [All contributors](https://github.com/VanOns/filament-content-builder/graphs/contributors)
 
 ## License
 
-The scripts and documentation in this project are released under the [MIT License](LICENSE.md).
+The scripts and documentation in this project are released under the [MIT License](https://github.com/VanOns/filament-content-builder/blob/release/v1/LICENSE.md).
 
 ---
 
