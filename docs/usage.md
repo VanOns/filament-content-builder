@@ -183,6 +183,31 @@ public static function settingsPrefix(): string;
 public static function mutateSettingsData(array $data): array;
 ```
 
+### Visibility
+
+Control where a block can be picked by defining a static `visible()` and/or `hidden()` method. Both are optional and are evaluated like a Filament closure in the context of the builder field, so all of Filament's injections are available, such as `$get`, `$record`, `$model`, `$operation` and `$livewire`:
+
+```php
+use App\Models\Page;
+use Filament\Schemas\Components\Utilities\Get;
+
+// Only allow the block on pages using the `landing` template:
+public static function visible(Get $get): bool
+{
+    return $get('template') === 'landing';
+}
+
+// Never allow the block outside of pages:
+public static function hidden(?string $model): bool
+{
+    return $model !== Page::class;
+}
+```
+
+`$get` resolves paths relative to the builder field, just like it does for a sibling field. The rules are evaluated on every render, so changing a field such as a template select updates the available blocks right away.
+
+A hidden block is removed from the block picker. Blocks of that type that were already added are no longer shown in the builder, but they are kept when the record is saved.
+
 ### Custom view
 
 Views are resolved from `resources/views/blocks/<kebab-case-type>.blade.php` by default. Override `view()` to change this:

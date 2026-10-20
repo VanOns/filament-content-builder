@@ -2,6 +2,7 @@
 
 namespace VanOns\FilamentContentBuilder\Blocks\Contracts;
 
+use Filament\Forms\Components\Builder\Block as BuilderBlock;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 use ReflectionNamedType;
@@ -11,6 +12,7 @@ use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
 use VanOns\FilamentContentBuilder\Traits\CanBeNested;
 use VanOns\FilamentContentBuilder\Traits\HasDynamicLabel;
 use VanOns\FilamentContentBuilder\Traits\HasSettings;
+use VanOns\FilamentContentBuilder\Traits\HasVisibility;
 
 abstract class Block
 {
@@ -18,6 +20,7 @@ abstract class Block
     use HasDynamicLabel;
     use CanBeNested;
     use HasSettings;
+    use HasVisibility;
 
     public int $blockIndex = 0;
     public static ?string $labelField = null;
@@ -167,12 +170,13 @@ abstract class Block
             : 'blocks.' . Str::kebab(static::type());
     }
 
-    public static function builderBlock(): \Filament\Forms\Components\Builder\Block
+    public static function builderBlock(): BuilderBlock
     {
-        return \Filament\Forms\Components\Builder\Block::make(static::type())
+        return BuilderBlock::make(static::type())
             ->label(fn (mixed $state) => static::getLabel($state) ?? static::title())
             ->icon(fn () => static::icon())
-            ->schema(fn (): array|Schema => static::getSchema());
+            ->schema(fn (): array|Schema => static::getSchema())
+            ->visible(fn (BuilderBlock $component): bool => static::isVisibleIn($component));
     }
 
     /**

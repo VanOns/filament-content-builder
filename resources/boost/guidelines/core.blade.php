@@ -115,6 +115,7 @@ Conventions:
 - Set `public static ?string $labelField` to render the value of a state field (e.g. `'title'`) as the builder item header.
 - Override `settingsSchema(): array` to add a per-block settings modal (a cog icon appears on the builder item). Settings live under `data.settings` by default — change the key with `settingsPrefix()`.
 - Override `toText()` for SEO/plain-text extraction. Default returns `null`.
+- Define `static visible(...): bool` and/or `static hidden(...): bool` to limit where a block can be picked. Their parameters are resolved like a Filament closure in the builder field's context (`Get $get`, `?Model $record`, `?string $model`, `$operation`, ...), e.g. `visible(Get $get): bool => $get('template') === 'landing'`. Already-added blocks of a hidden type are kept on save but not shown.
 - For nesting, extend or model after `Blocks\Container` and use `ContentBlocksRenderer::make(...)->contentBlocks(fn () => FilamentContentBuilder::getContainerBlocks())`.
 - The `CanBeFixed` trait's `getFields()` is **deprecated** — for fixed blocks, wrap `Block::schema()` in a Filament container with `->statePath('data.hero-block')` (see README "Fixed blocks").
 

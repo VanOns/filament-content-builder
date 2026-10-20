@@ -1,6 +1,6 @@
 ---
 name: create-template
-description: Use when the user wants to add a page-layout template to a project that uses van-ons/filament-content-builder — e.g. "create a landing-page template", "add a new template", "scaffold a template class", or wiring `Template::make()` and `TemplateService` into a Filament resource. Covers scaffolding via `make:template`, defining template fields, registering directories, and rendering on the front-end.
+description: 'Use when the user wants to add a page-layout template to a project that uses van-ons/filament-content-builder — e.g. "create a landing-page template", "add a new template", "scaffold a template class", or wiring `Template::make()` and `TemplateService` into a Filament resource. Covers scaffolding via `make:template`, defining template fields, registering directories, and rendering on the front-end.'
 ---
 
 # Create a template
