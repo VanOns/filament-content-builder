@@ -15,7 +15,7 @@ Skip this skill for: editing an existing block (just edit the file), adding a Fi
 
 ### 1. Scaffold
 
-Always start with the artisan generator — it creates both files, publishes the config if missing, and appends the class to `blocks`.
+Always start with the artisan generator — it creates the block class and view, publishes the config if missing, and appends the class to `blocks`.
 
 ```bash
 php artisan make:content-block Hero
@@ -28,6 +28,12 @@ Result:
 - Class added to `config/filament-content-builder.php` under `blocks`
 
 The command refuses PHP reserved words and duplicate `type()` values. Names are studly-cased automatically (`hero_section` → `HeroSection`).
+
+If the project renders blocks with a JavaScript front-end (Inertia/React/Vue) instead of Blade, pass `--without-view` to skip the view — and skip step 4 below:
+
+```bash
+php artisan make:content-block Hero --without-view
+```
 
 ### 2. Define the schema
 

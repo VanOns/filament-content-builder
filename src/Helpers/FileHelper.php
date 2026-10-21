@@ -22,7 +22,7 @@ class FileHelper
         'var', 'while', 'xor', 'yield',
     ];
 
-    public static function makeBlock(string $name, string $title): string
+    public static function makeBlock(string $name, string $title, bool $withView = true): string
     {
         $dir = app_path('View/Blocks');
         if (!File::exists($dir)) {
@@ -36,7 +36,9 @@ class FileHelper
             'title' => $title,
         ]);
 
-        static::makeBlockView($name);
+        if ($withView) {
+            static::makeBlockView($name);
+        }
 
         return $file;
     }

@@ -17,7 +17,8 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
      * @var string
      */
     protected $signature = 'make:content-block
-                            {name : The name of the content block}';
+                            {name : The name of the content block}
+                            {--without-view : Do not create a Blade view for the block}';
 
     /**
      * The console command description.
@@ -59,9 +60,12 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
 
         $this->line('Creating block...');
 
+        $withView = !$this->option('without-view');
+
         $filePath = FileHelper::makeBlock(
             name: $name,
             title: $name,
+            withView: $withView,
         );
 
         if (!File::exists(config_path('filament-content-builder.php'))) {
@@ -71,7 +75,10 @@ class MakeContentBlockCommand extends Command implements PromptsForMissingInput
         $this->updateConfigFile($name);
 
         $this->info("Block created successfully at {$filePath}.");
-        $this->info('View created successfully at ' . FileHelper::blockViewPath($name) . '.');
+
+        if ($withView) {
+            $this->info('View created successfully at ' . FileHelper::blockViewPath($name) . '.');
+        }
 
         return self::SUCCESS;
     }

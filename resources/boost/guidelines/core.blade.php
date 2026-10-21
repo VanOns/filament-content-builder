@@ -23,7 +23,7 @@ Default config registers five blocks (`CtaBlock`, `ListBlock`, `TextBlock`, `Emb
 
 | Command | Generates | Notes |
 |---|---|---|
-| `php artisan make:content-block {name}` | `app/View/Blocks/{Name}.php`, `resources/views/blocks/{name}.blade.php` | Publishes config if missing, then appends the new class to the `blocks` array. Fails on PHP reserved words and duplicate types. |
+| `php artisan make:content-block {name}` | `app/View/Blocks/{Name}.php`, `resources/views/blocks/{name}.blade.php` | Publishes config if missing, then appends the new class to the `blocks` array. Fails on PHP reserved words and duplicate types. Pass `--without-view` to skip the Blade view (e.g. Inertia/React front-ends). |
 | `php artisan make:template {name}` | `app/View/Templates/{Name}.php` | Plain `GeneratorCommand` — does not touch config. |
 
 ## Form usage
