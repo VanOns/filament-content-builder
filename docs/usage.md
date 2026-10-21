@@ -8,6 +8,8 @@ Start by creating a new content block:
 php artisan make:content-block
 ```
 
+Pass `--without-view` to skip the Blade view, for example when blocks are rendered by a JavaScript front-end.
+
 Add the `ContentBlocksRenderer` field to your Filament resource:
 
 ```php
