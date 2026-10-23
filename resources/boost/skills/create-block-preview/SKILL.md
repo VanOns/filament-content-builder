@@ -17,6 +17,7 @@ Skip this skill for: creating the block itself (use `create-content-block` first
 - The block picker shows it next to the picker when hovering a block (320px wide, 240px per variant), and a collapsed builder item shows it below its label. It is loaded as an `<img>`, so the SVG cannot use the page's CSS, fonts or scripts.
 - A block with layout variants declares them in `static previewVariants(): array` (`key => label`) and gets one file per variant: `{kebab-type}.{key}.svg` (the plain `{kebab-type}.svg` is then unused). The picker shows all variants with their label; a collapsed item shows the one `static previewVariantFor(array $data): ?string` returns for its data (falls back to the first).
 - Built-in package blocks ship their own previews. A file with the same name in `resources/block-previews/` overrides it.
+- The package also accepts `.webp`, `.png` and `.jpg` previews, so users can drop in a real screenshot. This skill always draws SVG. An existing raster preview counts as a preview — only replace it when asked (an SVG next to it takes precedence).
 - A block can point elsewhere by overriding `static preview(?string $variant = null): ?string` (absolute path to the SVG, or `null` for no preview).
 - Previews are cached by the browser and busted by the file's modification time, so a hard refresh is never needed.
 
@@ -117,7 +118,7 @@ Write it to the path from step 1 (one file per variant). For a block that overri
 ## Anti-patterns
 
 - Don't put previews in `public/` or reference them by URL — they are served by the package from `resources/block-previews/`.
-- Don't use a screenshot or raster image as the preview — keep it a small, hand-written SVG.
+- Don't create a raster preview (e.g. by saving a screenshot) — screenshots are only a reference; the preview you deliver is a small, hand-written SVG.
 - Don't override `preview()` just to use the default location; only override it for a different path.
 - Don't generate previews unasked for blocks the user didn't mention — offer it instead.
 - Don't add variants for every option a block has — only for structurally different layouts, at most 3.

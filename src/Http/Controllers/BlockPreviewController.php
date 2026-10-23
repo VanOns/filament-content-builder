@@ -13,8 +13,10 @@ class BlockPreviewController
 
         abort_unless($class && in_array($variant, array_column($class::previews(), 'variant'), true), 404);
 
-        return response()->file((string) $class::preview($variant), [
-            'Content-Type' => 'image/svg+xml',
+        $path = (string) $class::preview($variant);
+
+        return response()->file($path, [
+            'Content-Type' => $class::previewMimeType($path),
             'Cache-Control' => 'public, max-age=31536000, immutable',
             // Neutralizes scripts when the SVG is opened directly.
             'Content-Security-Policy' => "default-src 'none'; style-src 'unsafe-inline'; img-src data:",

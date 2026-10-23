@@ -10,14 +10,26 @@ use Illuminate\Support\Str;
 use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 /**
- * Blocks may have an SVG preview, shown when hovering the block in the block picker or a collapsed
- * builder item. It is read from `resources/block-previews/{kebab-type}.svg`, built-in blocks fall
- * back to the package's previews. Blocks with layout variants get a preview per variant.
+ * Blocks may have a preview image, shown when hovering the block in the block picker or a collapsed
+ * builder item. It is read from `resources/block-previews/{kebab-type}.{svg,webp,png,jpg,jpeg}`,
+ * built-in blocks fall back to the package's previews. Blocks with layout variants get a preview per
+ * variant.
  *
  * @mixin Block
  */
 trait HasPreview
 {
+    /**
+     * Supported preview formats, in lookup order.
+     */
+    public const PREVIEW_MIME_TYPES = [
+        'svg' => 'image/svg+xml',
+        'webp' => 'image/webp',
+        'png' => 'image/png',
+        'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+    ];
+
     /**
      * @var array<class-string, list<array{variant: ?string, label: ?string}>>
      */
@@ -49,21 +61,23 @@ trait HasPreview
     }
 
     /**
-     * Absolute path to the preview SVG of the block or one of its variants, or null when there is none.
+     * Absolute path to the preview image of the block or one of its variants, or null when there is none.
      */
     public static function preview(?string $variant = null): ?string
     {
-        $filename = Str::kebab(static::type()) . ($variant === null ? '' : ".{$variant}") . '.svg';
+        $name = Str::kebab(static::type()) . ($variant === null ? '' : ".{$variant}");
 
-        $paths = [resource_path("block-previews/{$filename}")];
+        $directories = [resource_path('block-previews')];
 
         if (static::isPackageBlock()) {
-            $paths[] = dirname(__DIR__, 2) . "/resources/previews/{$filename}";
+            $directories[] = dirname(__DIR__, 2) . '/resources/previews';
         }
 
-        foreach ($paths as $path) {
-            if (is_file($path)) {
-                return $path;
+        foreach ($directories as $directory) {
+            foreach (array_keys(static::PREVIEW_MIME_TYPES) as $extension) {
+                if (is_file($path = "{$directory}/{$name}.{$extension}")) {
+                    return $path;
+                }
             }
         }
 
@@ -111,7 +125,12 @@ trait HasPreview
     {
         $path = static::preview($variant);
 
-        return $path !== null && is_file($path) ? $path : null;
+        return $path !== null && is_file($path) && static::previewMimeType($path) ? $path : null;
+    }
+
+    public static function previewMimeType(string $path): ?string
+    {
+        return static::PREVIEW_MIME_TYPES[strtolower(pathinfo($path, PATHINFO_EXTENSION))] ?? null;
     }
 
     public static function previewUrl(?string $variant = null): ?string
@@ -197,18 +216,23 @@ trait HasPreview
     }
 
     /**
-     * Display size of a preview, scaled to the given width using the SVG's viewBox.
+     * Display size of a preview, scaled to the given width using the SVG's viewBox or the image's size.
      *
      * @return array{int, int}
      */
     protected static function previewSize(?string $variant, int $width): array
     {
-        $svg = (string) file_get_contents((string) static::previewPath($variant));
+        $path = (string) static::previewPath($variant);
+        [$sourceWidth, $sourceHeight] = [0, 0];
 
-        if (preg_match('/viewBox\s*=\s*["\'][-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i', $svg, $matches) && (float) $matches[1] > 0) {
-            return [$width, (int) round($width * (float) $matches[2] / (float) $matches[1])];
+        if (static::previewMimeType($path) !== 'image/svg+xml') {
+            [$sourceWidth, $sourceHeight] = @getimagesize($path) ?: [0, 0];
+        } elseif (preg_match('/viewBox\s*=\s*["\'][-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i', (string) file_get_contents($path), $matches)) {
+            [$sourceWidth, $sourceHeight] = [(float) $matches[1], (float) $matches[2]];
         }
 
-        return [$width, (int) round($width * 0.6)];
+        return $sourceWidth > 0
+            ? [$width, (int) round($width * $sourceHeight / $sourceWidth)]
+            : [$width, (int) round($width * 0.6)];
     }
 }
