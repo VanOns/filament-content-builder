@@ -220,7 +220,7 @@ trait HasPreview
      *
      * @return array{int, int}
      */
-    protected static function previewSize(?string $variant, int $width): array
+    public static function previewSize(?string $variant, int $width): array
     {
         $path = (string) static::previewPath($variant);
         [$sourceWidth, $sourceHeight] = [0, 0];
