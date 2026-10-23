@@ -212,16 +212,37 @@ A hidden block is removed from the block picker. Blocks of that type that were a
 
 ### Preview
 
-Blocks can have an SVG preview, shown in a tooltip when hovering the block in the block picker. Place it at `resources/block-previews/<kebab-case-type>.svg`, e.g. `resources/block-previews/hero.svg` for a `Hero` block. The tooltip is 320px wide, its height follows the SVG's `viewBox`.
+Blocks can have an SVG preview, shown when hovering the block in the block picker, and when hovering the label of a collapsed block in the builder. Place it at `resources/block-previews/<kebab-case-type>.svg`, e.g. `resources/block-previews/hero.svg` for a `Hero` block. The preview is 320px wide, its height follows the SVG's `viewBox`.
 
 The built-in blocks ship with a preview. Add a file with the same name, such as `text-block.svg`, to replace it. Override `preview()` to use a different path, or return `null` to disable the preview:
 
 ```php
-public static function preview(): ?string
+public static function preview(?string $variant = null): ?string
 {
     return resource_path('svg/hero-preview.svg');
 }
 ```
+
+#### Variants
+
+When a field switches a block between layouts that look very different, give each layout its own preview. Declare the variants with their labels, and map a block's data to the matching variant:
+
+```php
+public static function previewVariants(): array
+{
+    return [
+        'split' => __('Title and media'),
+        'full' => __('Media only'),
+    ];
+}
+
+public static function previewVariantFor(array $data): ?string
+{
+    return ($data['full_width'] ?? false) ? 'full' : 'split';
+}
+```
+
+Each variant is read from `resources/block-previews/<kebab-case-type>.<variant>.svg`, e.g. `hero.split.svg`. The block picker shows all variants with their labels, a collapsed block shows the variant matching its data. Keep variants for real layout changes, such as a different arrangement of cards or columns; a different background color doesn't need its own preview.
 
 Previews are served by the package, so no publishing is needed. When using [Laravel Boost](https://github.com/laravel/boost), the `create-block-preview` skill lets your AI assistant draw previews based on your blocks' views and styling.
 

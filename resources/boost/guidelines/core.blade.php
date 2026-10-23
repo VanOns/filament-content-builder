@@ -121,9 +121,11 @@ Conventions:
 
 ## Block previews
 
-A block can have an SVG preview, shown in a tooltip when hovering the block in the block picker. It lives at `resources/block-previews/{kebab-type}.svg` (same name as the block view, e.g. `HeroBlock` → `hero-block.svg`). Built-in blocks ship their own; a file with the same name overrides it. Override `static preview(): ?string` to use another path. Check with `$block::hasPreview()`.
+A block can have an SVG preview, shown when hovering the block in the block picker or a collapsed builder item. It lives at `resources/block-previews/{kebab-type}.svg` (same name as the block view, e.g. `HeroBlock` → `hero-block.svg`). Built-in blocks ship their own; a file with the same name overrides it. Override `static preview(?string $variant = null): ?string` to use another path. Check with `$block::hasPreview()`.
 
-**Suggest a preview**: after creating a block, or when changing a block's layout or fields, check whether its preview file exists. If it doesn't (and the block doesn't override `preview()`), end your response by asking the user whether to create one with the `create-block-preview` skill. Don't create it unasked. When an existing preview no longer matches a changed layout, offer to update it the same way.
+Blocks whose fields switch between structurally different layouts (not just colors, sizes, mirroring or optional elements) can declare up to 3 variants in `static previewVariants(): array` (`key => label`), each with its own `{kebab-type}.{key}.svg`, and map an item's data to one in `static previewVariantFor(array $data): ?string`.
+
+**Suggest a preview**: after creating a block, or when changing a block's layout or fields, check whether its preview file(s) exist. If they don't (and the block doesn't override `preview()`), end your response by asking the user whether to create one with the `create-block-preview` skill. Don't create it unasked. When an existing preview no longer matches a changed layout, or a new field adds a structurally different layout, offer to update it or add a variant the same way.
 
 ## Templates
 

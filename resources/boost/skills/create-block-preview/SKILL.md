@@ -1,6 +1,6 @@
 ---
 name: create-block-preview
-description: 'Use when the user wants an SVG preview for one or more content blocks of van-ons/filament-content-builder — e.g. "create a preview for the hero block", "generate block previews", "add previews for all blocks", "which blocks are missing a preview". The preview is shown when hovering a block in the block picker. Covers finding blocks without a preview, studying how the block looks, drawing the SVG and verifying it.'
+description: 'Use when the user wants an SVG preview for one or more content blocks of van-ons/filament-content-builder — e.g. "create a preview for the hero block", "generate block previews", "add previews for all blocks", "which blocks are missing a preview". The preview is shown when hovering a block in the block picker or a collapsed builder item. Covers finding blocks without a preview, deciding on layout variants, studying how the block looks, drawing the SVG and verifying it.'
 ---
 
 # Create a block preview
@@ -14,9 +14,10 @@ Skip this skill for: creating the block itself (use `create-content-block` first
 ## How previews work
 
 - A preview is an SVG file at `resources/block-previews/{kebab-type}.svg`, where `{kebab-type}` is `Str::kebab($block::type())` — the same name as the block's Blade view (`HeroBlock` → `hero-block.svg`).
-- The block picker shows it in a tooltip next to the block when hovering, at a width of 320px. It is loaded as an `<img>`, so the SVG cannot use the page's CSS, fonts or scripts.
+- The block picker shows it next to the picker when hovering a block (320px wide, 240px per variant), and a collapsed builder item shows it below its label. It is loaded as an `<img>`, so the SVG cannot use the page's CSS, fonts or scripts.
+- A block with layout variants declares them in `static previewVariants(): array` (`key => label`) and gets one file per variant: `{kebab-type}.{key}.svg` (the plain `{kebab-type}.svg` is then unused). The picker shows all variants with their label; a collapsed item shows the one `static previewVariantFor(array $data): ?string` returns for its data (falls back to the first).
 - Built-in package blocks ship their own previews. A file with the same name in `resources/block-previews/` overrides it.
-- A block can point elsewhere by overriding `static preview(): ?string` (absolute path to the SVG, or `null` for no preview).
+- A block can point elsewhere by overriding `static preview(?string $variant = null): ?string` (absolute path to the SVG, or `null` for no preview).
 - Previews are cached by the browser and busted by the file's modification time, so a hard refresh is never needed.
 
 ## Workflow
@@ -28,7 +29,11 @@ For one block, resolve its path directly. For "all" or "missing", list every reg
 ```bash
 php artisan tinker --execute '
 foreach (\VanOns\FilamentContentBuilder\Facade\FilamentContentBuilder::getBlocks() as $block) {
-    echo str_pad($block, 50), $block::hasPreview() ? "  ok  " . $block::preview() : "  missing  resources/block-previews/" . \Illuminate\Support\Str::kebab($block::type()) . ".svg", PHP_EOL;
+    foreach (array_keys($block::previewVariants()) ?: [null] as $variant) {
+        echo str_pad(class_basename($block) . ($variant ? " ({$variant})" : ""), 40),
+            $block::preview($variant) ?? "missing: resources/block-previews/" . \Illuminate\Support\Str::kebab($block::type()) . ($variant ? ".{$variant}" : "") . ".svg",
+            PHP_EOL;
+    }
 }'
 ```
 
@@ -43,9 +48,35 @@ The preview should resemble the rendered block closely, not be a generic wirefra
 - **Styling**: layout classes in that markup, and brand colors from the CSS theme / Tailwind config.
 - **Real render**: the most reliable reference. If a page renders the block (a demo page with all blocks, or any page using it), screenshot it with a headless browser and draw from that. Otherwise use a design file the project's guidelines reference (e.g. Figma nodes per block).
 
-Preview the default variant. When a block has a variant field that changes the layout drastically (e.g. media left/right), still draw one preview — the default.
+### 3. Decide on variants
 
-### 3. Draw the SVG
+Most blocks get a single preview of their default look. Only give a block variants when a field switches between **structurally different layouts** — someone who knows one variant couldn't picture the other. For example:
+
+- **Is a variant**: cards switching from portraits to article cards, a title + media split vs. a full-width media, one text column vs. two.
+- **Is not a variant**: background or accent colors, sizes and spacing, mirrored layouts (media left/right), heading levels, button styles, optional elements toggled on/off (an icon, an extra button), or anything only the content changes.
+
+Keep it to **2, at most 3** variants per block; group options sharing a layout into one variant (e.g. three slider types with the same portrait cards → one variant). Fewer is better: every variant adds a preview to the picker.
+
+For a block with variants, add both methods to the block class, list the default variant first, and use the project's translation helper for labels:
+
+```php
+public static function previewVariants(): array
+{
+    return [
+        'split' => __('Title and media'),
+        'full' => __('Media only'),
+    ];
+}
+
+public static function previewVariantFor(array $data): ?string
+{
+    return ($data['full_width'] ?? false) ? 'full' : 'split';
+}
+```
+
+`$data` is the builder item's raw state (settings under `$data['settings']`). Mirror the condition the front-end uses to pick the layout.
+
+### 4. Draw the SVG
 
 Rules:
 
@@ -75,13 +106,13 @@ Example — a hero with title, subtitle, button and image on the right:
 </svg>
 ```
 
-Write it to the path from step 1. For a block that overrides `preview()`, write to the path it returns.
+Write it to the path from step 1 (one file per variant). For a block that overrides `preview()`, write to the path it returns. When adding variants to a block that already has a preview, rename its `{kebab-type}.svg` to the matching variant file. Draw variants alike (same canvas, colors and height where possible) so they only differ in what actually changes.
 
-### 4. Verify
+### 5. Verify
 
 - Render the SVG to PNG and look at it. Prefer a browser, which renders it exactly like the picker does — e.g. headless Chrome (`google-chrome`, `chromium`, or `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` on macOS): `--headless --screenshot=/tmp/hero-block.png --window-size=800,400 file:///abs/path/hero-block.svg`. `rsvg-convert` works too; ImageMagick's built-in renderer drops gradients. Compare against the real block and adjust.
 - Confirm it is picked up: `$block::hasPreview()` returns `true` (rerun the command from step 1).
-- In the admin panel, hover the block in the "Add to …" picker of a content builder field.
+- In the admin panel, hover the block in the "Add to …" picker of a content builder field, and hover a collapsed item of that block.
 
 ## Anti-patterns
 
@@ -89,3 +120,4 @@ Write it to the path from step 1. For a block that overrides `preview()`, write 
 - Don't use a screenshot or raster image as the preview — keep it a small, hand-written SVG.
 - Don't override `preview()` just to use the default location; only override it for a different path.
 - Don't generate previews unasked for blocks the user didn't mention — offer it instead.
+- Don't add variants for every option a block has — only for structurally different layouts, at most 3.

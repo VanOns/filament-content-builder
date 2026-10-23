@@ -183,7 +183,7 @@ abstract class Block
             // The block picker is the only place the label is resolved without an item.
             ->label(fn (mixed $state, ?string $key = null) => $state === null && $key === null
                 ? static::pickerLabel()
-                : static::getLabel($state) ?? static::title())
+                : static::itemLabel(static::getLabel($state) ?? static::title(), is_array($state) ? $state : []))
             ->icon(fn () => static::icon())
             ->schema(fn (): array|Schema => static::getSchema())
             ->visible(fn (BuilderBlock $component): bool => static::isVisibleIn($component));

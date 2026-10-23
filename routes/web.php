@@ -3,5 +3,5 @@
 use Illuminate\Support\Facades\Route;
 use VanOns\FilamentContentBuilder\Http\Controllers\BlockPreviewController;
 
-Route::get('filament-content-builder/block-previews/{type}', BlockPreviewController::class)
+Route::get('filament-content-builder/block-previews/{type}/{variant?}', BlockPreviewController::class)
     ->name('filament-content-builder.block-preview');
