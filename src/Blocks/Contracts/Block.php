@@ -11,6 +11,7 @@ use RuntimeException;
 use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
 use VanOns\FilamentContentBuilder\Traits\CanBeNested;
 use VanOns\FilamentContentBuilder\Traits\HasDynamicLabel;
+use VanOns\FilamentContentBuilder\Traits\HasPreview;
 use VanOns\FilamentContentBuilder\Traits\HasSettings;
 use VanOns\FilamentContentBuilder\Traits\HasVisibility;
 
@@ -18,6 +19,7 @@ abstract class Block
 {
     use CanBeFixed;
     use HasDynamicLabel;
+    use HasPreview;
     use CanBeNested;
     use HasSettings;
     use HasVisibility;
@@ -165,15 +167,23 @@ abstract class Block
 
     public static function view(): string
     {
-        return str_contains(static::class, 'VanOns\FilamentContentBuilder\Blocks')
+        return static::isPackageBlock()
             ? 'filament-content-builder::blocks.' . Str::kebab(static::type())
             : 'blocks.' . Str::kebab(static::type());
+    }
+
+    protected static function isPackageBlock(): bool
+    {
+        return str_contains(static::class, 'VanOns\FilamentContentBuilder\Blocks');
     }
 
     public static function builderBlock(): BuilderBlock
     {
         return BuilderBlock::make(static::type())
-            ->label(fn (mixed $state) => static::getLabel($state) ?? static::title())
+            // The block picker is the only place the label is resolved without an item.
+            ->label(fn (mixed $state, ?string $key = null) => $state === null && $key === null
+                ? static::pickerLabel()
+                : static::getLabel($state) ?? static::title())
             ->icon(fn () => static::icon())
             ->schema(fn (): array|Schema => static::getSchema())
             ->visible(fn (BuilderBlock $component): bool => static::isVisibleIn($component));

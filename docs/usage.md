@@ -210,6 +210,21 @@ public static function hidden(?string $model): bool
 
 A hidden block is removed from the block picker. Blocks of that type that were already added are no longer shown in the builder, but they are kept when the record is saved.
 
+### Preview
+
+Blocks can have an SVG preview, shown in a tooltip when hovering the block in the block picker. Place it at `resources/block-previews/<kebab-case-type>.svg`, e.g. `resources/block-previews/hero.svg` for a `Hero` block. The tooltip is 320px wide, its height follows the SVG's `viewBox`.
+
+The built-in blocks ship with a preview. Add a file with the same name, such as `text-block.svg`, to replace it. Override `preview()` to use a different path, or return `null` to disable the preview:
+
+```php
+public static function preview(): ?string
+{
+    return resource_path('svg/hero-preview.svg');
+}
+```
+
+Previews are served by the package, so no publishing is needed. When using [Laravel Boost](https://github.com/laravel/boost), the `create-block-preview` skill lets your AI assistant draw previews based on your blocks' views and styling.
+
 ### Custom view
 
 Views are resolved from `resources/views/blocks/<kebab-case-type>.blade.php` by default. Override `view()` to change this:

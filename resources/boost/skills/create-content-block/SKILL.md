@@ -95,6 +95,7 @@ class Hero extends Block
 | Customize what stored data looks like (e.g. cast/transform) | `parseData(): array` |
 | Provide plain text for SEO / search indexing | `toText(): ?string` |
 | Allow nesting inside the built-in `Container` block | Add the class to `container-blocks` in config |
+| Show a preview when hovering the block in the picker | Add `resources/block-previews/{kebab-type}.svg` (see `create-block-preview`), or override `static preview(): ?string` |
 
 ### 4. Build the Blade view
 
@@ -180,6 +181,10 @@ ContentBlocksRenderer::make('content')
 ```
 
 A closure works too — useful for permission/context-based filtering.
+
+### 9. Offer a preview
+
+The block picker shows an SVG preview when hovering a block, read from `resources/block-previews/{kebab-type}.svg`. A new block has none — ask the user whether to create one with the `create-block-preview` skill.
 
 ## Common follow-ups
 
