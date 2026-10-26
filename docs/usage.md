@@ -244,11 +244,14 @@ public static function previewVariantFor(array $data): ?string
 
 Each variant is read from `resources/block-previews/<kebab-case-type>.<variant>.svg` (or another supported format), e.g. `hero.split.svg`. The block picker shows all variants with their labels, a collapsed block shows the variant matching its data. Keep variants for real layout changes, such as a different arrangement of cards or columns; a different background color doesn't need its own preview.
 
-#### Page preview
+In the block picker, previews are pinned next to the picker by default. Set `preview_position` to `tooltip` in the config to show them next to the hovered block instead:
 
-The **Preview** button on the builder field opens a modal that stacks the previews of all blocks in their order, giving an impression of the page. Blocks without a preview show a placeholder. For blocks with variants, the arrows switch between them; this only changes the modal, not the block. The button is hidden when none of the blocks has a preview.
+```php
+// config/filament-content-builder.php
+'preview_position' => 'tooltip',
+```
 
-Previews are served by the package, so no publishing is needed. When using [Laravel Boost](https://github.com/laravel/boost), the `create-block-preview` skill lets your AI assistant draw previews based on your blocks' views and styling.
+Previews are served by the package, so no publishing is needed. They are only served to users who can access a Filament panel. When using [Laravel Boost](https://github.com/laravel/boost), the `create-block-preview` skill lets your AI assistant draw previews based on your blocks' views and styling.
 
 ### Custom view
 

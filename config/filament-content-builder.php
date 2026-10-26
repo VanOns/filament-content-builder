@@ -80,6 +80,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Preview position
+    |--------------------------------------------------------------------------
+    |
+    | Where block previews appear when hovering a block in the block picker:
+    | `panel` pins them next to the picker, `tooltip` shows them next to the
+    | hovered block.
+    |
+    */
+
+    'preview_position' => 'panel',
+
+    /*
+    |--------------------------------------------------------------------------
     | Block usage
     |--------------------------------------------------------------------------
     |

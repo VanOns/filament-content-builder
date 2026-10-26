@@ -180,10 +180,14 @@ abstract class Block
     public static function builderBlock(): BuilderBlock
     {
         return BuilderBlock::make(static::type())
-            // The block picker is the only place the label is resolved without an item.
-            ->label(fn (mixed $state, ?string $key = null) => $state === null && $key === null
-                ? static::pickerLabel()
-                : static::itemLabel(static::getLabel($state) ?? static::title(), is_array($state) ? $state : []))
+            ->label(function (mixed $state, ?string $key = null) {
+                $label = static::getLabel($state) ?? static::title();
+
+                // The block picker is the only place the label is resolved without an item.
+                return $state === null && $key === null
+                    ? static::pickerLabel($label)
+                    : static::itemLabel($label, is_array($state) ? $state : []);
+            })
             ->icon(fn () => static::icon())
             ->schema(fn (): array|Schema => static::getSchema())
             ->visible(fn (BuilderBlock $component): bool => static::isVisibleIn($component));

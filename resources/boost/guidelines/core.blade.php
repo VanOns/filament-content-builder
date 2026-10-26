@@ -121,7 +121,7 @@ Conventions:
 
 ## Block previews
 
-A block can have a preview image, shown when hovering the block in the block picker or a collapsed builder item. It lives at `resources/block-previews/{kebab-type}.svg` (same name as the block view, e.g. `HeroBlock` → `hero-block.svg`). WebP, PNG and JPG are supported for user-supplied screenshots, but always create previews as SVG. Built-in blocks ship their own; a file with the same name overrides it. Override `static preview(?string $variant = null): ?string` to use another path. Check with `$block::hasPreview()`.
+A block can have a preview image, shown when hovering the block in the block picker or a collapsed builder item. It lives at `resources/block-previews/{kebab-type}.svg` (same name as the block view, e.g. `HeroBlock` → `hero-block.svg`). WebP, PNG and JPG are supported for user-supplied screenshots, but always create previews as SVG. Built-in blocks ship their own; a file with the same name overrides it. Override `static preview(?string $variant = null): ?string` to use another path. Check with `$block::hasPreview()`. In the picker, previews are pinned next to the picker; set `preview_position` to `tooltip` in the config to show them next to the hovered block. They are only served to users who can access a Filament panel.
 
 Blocks whose fields switch between structurally different layouts (not just colors, sizes, mirroring or optional elements) can declare up to 3 variants in `static previewVariants(): array` (`key => label`), each with its own `{kebab-type}.{key}.svg`, and map an item's data to one in `static previewVariantFor(array $data): ?string`.
 
@@ -160,7 +160,7 @@ public static function form(Form $form): Form
 | `getBuilderBlocks(?array $blocks = null)` | Convert classes to `Filament\Forms\Components\Builder\Block` instances. |
 | `blockExists(string $type)` | Whether a block type is registered. |
 | `getBlock(string $type, array $data)` | Hydrate a block instance (auto-increments `$blockIndex`). |
-| `getBlockClass(?string $type)` | Resolve `class-string<Block>` from a type. |
+| `getBlockClass(?string $type, ?array $blocks = null)` | Resolve `class-string<Block>` from a type, among the registered blocks or the given ones. |
 | `parseBlocks(array $blocks)` | Map stored blocks through each block's `parseData()`. |
 | `parseBlockInstances(array $blocks)` | Same, but returns hydrated `Block` instances. |
 

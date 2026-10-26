@@ -31,7 +31,7 @@ trait HasPreview
     ];
 
     /**
-     * @var array<class-string, list<array{variant: ?string, label: ?string}>>
+     * @var array<string, list<array{variant: ?string, label: ?string}>>
      */
     protected static array $resolvedPreviews = [];
 
@@ -96,7 +96,7 @@ trait HasPreview
      */
     public static function previews(): array
     {
-        return static::$resolvedPreviews[static::class] ??= static::resolvePreviews();
+        return static::$resolvedPreviews[static::class . '|' . app()->getLocale()] ??= static::resolvePreviews();
     }
 
     /**
@@ -139,16 +139,17 @@ trait HasPreview
             return null;
         }
 
-        return route('filament-content-builder.block-preview', array_filter([
+        // Relative, so the image is requested with the panel's session. Relative routes lack the base path.
+        return request()->getBaseUrl() . route('filament-content-builder.block-preview', array_filter([
             'type' => static::type(),
             'variant' => $variant,
-            'v' => filemtime($path),
+            'v' => substr((string) md5_file($path), 0, 12),
         ], fn (mixed $value) => $value !== null), absolute: false);
     }
 
-    protected static function pickerLabel(): string|Htmlable
+    protected static function pickerLabel(string $label): string|Htmlable
     {
-        return static::withPreviewTooltip(static::title(), static::previews(), picker: true);
+        return static::withPreviewTooltip($label, static::previews(), picker: true);
     }
 
     protected static function itemLabel(string $label, array $data): string|Htmlable
@@ -170,11 +171,13 @@ trait HasPreview
             return $label;
         }
 
-        $key = static::class . ($picker ? '|picker|' : '|item|') . implode(',', array_column($previews, 'variant'));
+        $position = $picker ? config('filament-content-builder.preview_position', 'panel') : 'item';
+
+        $key = implode('|', [static::class, $position, app()->getLocale(), ...array_column($previews, 'variant')]);
 
         return new HtmlString(sprintf(
             '<span x-tooltip="%s">%s</span>',
-            e(static::$previewTooltips[$key] ??= static::makePreviewTooltip($previews, $picker)),
+            e(static::$previewTooltips[$key] ??= static::makePreviewTooltip($previews, $position)),
             e($label),
         ));
     }
@@ -182,7 +185,7 @@ trait HasPreview
     /**
      * @param list<array{variant: ?string, label: ?string}> $previews
      */
-    protected static function makePreviewTooltip(array $previews, bool $picker): string
+    protected static function makePreviewTooltip(array $previews, string $position): string
     {
         $content = '';
 
@@ -200,16 +203,21 @@ trait HasPreview
                 . '</figure>';
         }
 
-        $props = $picker
-            // Pinned next to the dropdown panel, triggered by the whole item including its icon.
-            ? "placement: 'right-start', arrow: false, offset: [0, 8], duration: 0, "
-                . "triggerTarget: \$el.closest('.fi-dropdown-list-item') ?? \$el, "
-                . "getReferenceClientRect: () => (\$el.closest('.fi-dropdown-panel') ?? \$el).getBoundingClientRect()"
+        // Picker positions are triggered by the whole item, including its icon.
+        $pickerItem = "(\$el.closest('.fi-dropdown-list-item') ?? \$el)";
+
+        $props = match ($position) {
             // Below the item's label and icon, only while the item is collapsed.
-            : "placement: 'bottom-start', delay: [400, 0], "
+            'item' => "placement: 'bottom-start', delay: [400, 0], "
                 . "triggerTarget: [\$el.closest('.fi-fo-builder-item-header-label') ?? \$el, \$el.closest('.fi-fo-builder-item-header')?.querySelector('.fi-fo-builder-item-header-icon')].filter(Boolean), "
                 . "getReferenceClientRect: () => (\$el.closest('.fi-fo-builder-item-header-label') ?? \$el).getBoundingClientRect(), "
-                . "onShow: () => !!\$el.closest('.fi-fo-builder-item')?.classList.contains('fi-collapsed')";
+                . "onShow: () => !!\$el.closest('.fi-fo-builder-item')?.classList.contains('fi-collapsed')",
+            'tooltip' => "placement: 'right', triggerTarget: {$pickerItem}, "
+                . "getReferenceClientRect: () => {$pickerItem}.getBoundingClientRect()",
+            // Pinned next to the dropdown panel.
+            default => "placement: 'right-start', arrow: false, offset: [0, 8], duration: 0, triggerTarget: {$pickerItem}, "
+                . "getReferenceClientRect: () => (\$el.closest('.fi-dropdown-panel') ?? \$el).getBoundingClientRect()",
+        };
 
         return '{ content: ' . Js::from('<div style="display: grid; gap: 0.5rem">' . $content . '</div>')
             . ", theme: \$store.theme, allowHTML: true, maxWidth: 'none', {$props} }";
@@ -220,7 +228,7 @@ trait HasPreview
      *
      * @return array{int, int}
      */
-    public static function previewSize(?string $variant, int $width): array
+    protected static function previewSize(?string $variant, int $width): array
     {
         $path = (string) static::previewPath($variant);
         [$sourceWidth, $sourceHeight] = [0, 0];
