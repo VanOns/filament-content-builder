@@ -22,11 +22,4 @@ return [
     'paste_block_submit' => 'Blok plakken',
     'paste_block_data_label' => 'Blokdata',
     'paste_block_data_helper' => 'Kopieer een blok via de kopieerknop en plak het resultaat hier.',
-    'preview_page' => 'Voorbeeld',
-    'preview_page_heading' => 'Paginavoorbeeld',
-    'preview_page_description' => 'Een indruk van de pagina, op basis van de voorbeelden van de blokken.',
-    'preview_missing' => 'Geen voorbeeld',
-    'previous_variant' => 'Vorige variant',
-    'next_variant' => 'Volgende variant',
-    'close' => 'Sluiten',
 ];

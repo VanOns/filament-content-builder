@@ -22,11 +22,4 @@ return [
     'paste_block_submit' => 'Paste block',
     'paste_block_data_label' => 'Block data',
     'paste_block_data_helper' => 'Copy a block using the copy button, then paste the result here.',
-    'preview_page' => 'Preview',
-    'preview_page_heading' => 'Page preview',
-    'preview_page_description' => 'An impression of the page, based on the previews of its blocks.',
-    'preview_missing' => 'No preview',
-    'previous_variant' => 'Previous variant',
-    'next_variant' => 'Next variant',
-    'close' => 'Close',
 ];
