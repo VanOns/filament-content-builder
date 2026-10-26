@@ -14,7 +14,7 @@ Skip this skill for: creating the block itself (use `create-content-block` first
 ## How previews work
 
 - A preview is an SVG file at `resources/block-previews/{kebab-type}.svg`, where `{kebab-type}` is `Str::kebab($block::type())` — the same name as the block's Blade view (`HeroBlock` → `hero-block.svg`).
-- The block picker shows it when hovering a block (320px wide, 240px per variant) — pinned next to the picker, or next to the hovered block with `'preview_position' => 'tooltip'` in the config — and a collapsed builder item shows it below its label. It is loaded as an `<img>`, so the SVG cannot use the page's CSS, fonts or scripts.
+- The block picker shows it when hovering a block (320px wide, 240px per variant) — next to the hovered block, or pinned next to the picker with `'preview_position' => 'panel'` in the config — and a collapsed builder item shows it below its label. It is loaded as an `<img>`, so the SVG cannot use the page's CSS, fonts or scripts.
 - A block with layout variants declares them in `static previewVariants(): array` (`key => label`) and gets one file per variant: `{kebab-type}.{key}.svg` (the plain `{kebab-type}.svg` is then unused). The picker shows all variants with their label; a collapsed item shows the one `static previewVariantFor(array $data): ?string` returns for its data (falls back to the first).
 - Built-in package blocks ship their own previews. A file with the same name in `resources/block-previews/` overrides it.
 - The package also accepts `.webp`, `.png` and `.jpg` previews, so users can drop in a real screenshot. This skill always draws SVG. An existing raster preview counts as a preview — only replace it when asked (an SVG next to it takes precedence).

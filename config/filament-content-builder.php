@@ -84,12 +84,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | Where block previews appear when hovering a block in the block picker:
-    | `panel` pins them next to the picker, `tooltip` shows them next to the
-    | hovered block.
+    | `tooltip` shows them next to the hovered block, `panel` pins them next
+    | to the picker.
     |
     */
 
-    'preview_position' => 'panel',
+    'preview_position' => 'tooltip',
 
     /*
     |--------------------------------------------------------------------------

@@ -8,9 +8,6 @@ use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Only serves previews to users that can access a Filament panel, mirroring Filament's `Authenticate` middleware.
- */
 class AuthenticateBlockPreview
 {
     public function handle(Request $request, Closure $next): Response
@@ -22,6 +19,7 @@ class AuthenticateBlockPreview
                 continue;
             }
 
+            // Same rule as Filament's `Authenticate` middleware.
             if ($user instanceof FilamentUser ? $user->canAccessPanel($panel) : app()->isLocal()) {
                 return $next($request);
             }

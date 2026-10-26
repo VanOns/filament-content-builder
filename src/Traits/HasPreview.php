@@ -10,11 +10,6 @@ use Illuminate\Support\Str;
 use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 
 /**
- * Blocks may have a preview image, shown when hovering the block in the block picker or a collapsed
- * builder item. It is read from `resources/block-previews/{kebab-type}.{svg,webp,png,jpg,jpeg}`,
- * built-in blocks fall back to the package's previews. Blocks with layout variants get a preview per
- * variant.
- *
  * @mixin Block
  */
 trait HasPreview
@@ -41,10 +36,7 @@ trait HasPreview
     protected static array $previewTooltips = [];
 
     /**
-     * Layout variants that each get their own preview, as `key => label`. Their previews are read
-     * from `{kebab-type}.{key}.svg` instead of `{kebab-type}.svg`.
-     *
-     * @return array<string, string>
+     * @return array<string, string> key => label
      */
     public static function previewVariants(): array
     {
@@ -52,8 +44,7 @@ trait HasPreview
     }
 
     /**
-     * The variant matching an item's data, previewed when hovering the collapsed item. Falls back
-     * to the first variant.
+     * Falls back to the first variant when null.
      */
     public static function previewVariantFor(array $data): ?string
     {
@@ -61,7 +52,7 @@ trait HasPreview
     }
 
     /**
-     * Absolute path to the preview image of the block or one of its variants, or null when there is none.
+     * Absolute path to the preview image.
      */
     public static function preview(?string $variant = null): ?string
     {
@@ -90,8 +81,6 @@ trait HasPreview
     }
 
     /**
-     * The previews that exist, in variant order.
-     *
      * @return list<array{variant: ?string, label: ?string}>
      */
     public static function previews(): array
@@ -139,7 +128,7 @@ trait HasPreview
             return null;
         }
 
-        // Relative, so the image is requested with the panel's session. Relative routes lack the base path.
+        // Relative routes lack the base path.
         return request()->getBaseUrl() . route('filament-content-builder.block-preview', array_filter([
             'type' => static::type(),
             'variant' => $variant,
@@ -171,7 +160,7 @@ trait HasPreview
             return $label;
         }
 
-        $position = $picker ? config('filament-content-builder.preview_position', 'panel') : 'item';
+        $position = $picker ? config('filament-content-builder.preview_position', 'tooltip') : 'item';
 
         $key = implode('|', [static::class, $position, app()->getLocale(), ...array_column($previews, 'variant')]);
 
@@ -203,20 +192,17 @@ trait HasPreview
                 . '</figure>';
         }
 
-        // Picker positions are triggered by the whole item, including its icon.
         $pickerItem = "(\$el.closest('.fi-dropdown-list-item') ?? \$el)";
 
         $props = match ($position) {
-            // Below the item's label and icon, only while the item is collapsed.
             'item' => "placement: 'bottom-start', delay: [400, 0], "
                 . "triggerTarget: [\$el.closest('.fi-fo-builder-item-header-label') ?? \$el, \$el.closest('.fi-fo-builder-item-header')?.querySelector('.fi-fo-builder-item-header-icon')].filter(Boolean), "
                 . "getReferenceClientRect: () => (\$el.closest('.fi-fo-builder-item-header-label') ?? \$el).getBoundingClientRect(), "
                 . "onShow: () => !!\$el.closest('.fi-fo-builder-item')?.classList.contains('fi-collapsed')",
-            'tooltip' => "placement: 'right', triggerTarget: {$pickerItem}, "
-                . "getReferenceClientRect: () => {$pickerItem}.getBoundingClientRect()",
-            // Pinned next to the dropdown panel.
-            default => "placement: 'right-start', arrow: false, offset: [0, 8], duration: 0, triggerTarget: {$pickerItem}, "
+            'panel' => "placement: 'right-start', arrow: false, offset: [0, 8], duration: 0, triggerTarget: {$pickerItem}, "
                 . "getReferenceClientRect: () => (\$el.closest('.fi-dropdown-panel') ?? \$el).getBoundingClientRect()",
+            default => "placement: 'right', triggerTarget: {$pickerItem}, "
+                . "getReferenceClientRect: () => {$pickerItem}.getBoundingClientRect()",
         };
 
         return '{ content: ' . Js::from('<div style="display: grid; gap: 0.5rem">' . $content . '</div>')
@@ -224,8 +210,6 @@ trait HasPreview
     }
 
     /**
-     * Display size of a preview, scaled to the given width using the SVG's viewBox or the image's size.
-     *
      * @return array{int, int}
      */
     protected static function previewSize(?string $variant, int $width): array
