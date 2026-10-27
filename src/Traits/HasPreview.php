@@ -194,15 +194,20 @@ trait HasPreview
 
         $pickerItem = "(\$el.closest('.fi-dropdown-list-item') ?? \$el)";
 
+        // Move below the picker when there's no room on the right.
+        $flip = fn (string $variation) => "popperOptions: { modifiers: [{ name: 'flip', options: { altAxis: false, fallbackPlacements: ['bottom{$variation}', 'top{$variation}'] } }] }";
+
         $props = match ($position) {
             'item' => "placement: 'bottom-start', delay: [400, 0], "
                 . "triggerTarget: [\$el.closest('.fi-fo-builder-item-header-label') ?? \$el, \$el.closest('.fi-fo-builder-item-header')?.querySelector('.fi-fo-builder-item-header-icon')].filter(Boolean), "
                 . "getReferenceClientRect: () => (\$el.closest('.fi-fo-builder-item-header-label') ?? \$el).getBoundingClientRect(), "
                 . "onShow: () => !!\$el.closest('.fi-fo-builder-item')?.classList.contains('fi-collapsed')",
             'panel' => "placement: 'right-start', arrow: false, offset: [0, 8], duration: 0, triggerTarget: {$pickerItem}, "
-                . "getReferenceClientRect: () => (\$el.closest('.fi-dropdown-panel') ?? \$el).getBoundingClientRect()",
+                . "getReferenceClientRect: () => (\$el.closest('.fi-dropdown-panel') ?? \$el).getBoundingClientRect(), "
+                . $flip('-start'),
             default => "placement: 'right', triggerTarget: {$pickerItem}, "
-                . "getReferenceClientRect: () => {$pickerItem}.getBoundingClientRect()",
+                . "getReferenceClientRect: () => {$pickerItem}.getBoundingClientRect(), "
+                . $flip(''),
         };
 
         return '{ content: ' . Js::from('<div style="display: grid; gap: 0.5rem">' . $content . '</div>')
