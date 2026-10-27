@@ -244,7 +244,7 @@ public static function previewVariantFor(array $data): ?string
 
 Each variant is read from `resources/block-previews/<kebab-case-type>.<variant>.svg` (or another supported format), e.g. `hero.split.svg`. The block picker shows all variants with their labels, a collapsed block shows the variant matching its data. Keep variants for real layout changes, such as a different arrangement of cards or columns; a different background color doesn't need its own preview.
 
-In the block picker, previews are shown next to the hovered block by default. Set `preview_position` to `panel` in the config to pin them next to the picker instead:
+In the block picker, previews are shown next to the hovered block by default. Set `preview_position` to `panel` in the config to pin them next to the picker instead. Either way, they move below when there is no room on the right:
 
 ```php
 // config/filament-content-builder.php

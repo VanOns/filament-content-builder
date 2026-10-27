@@ -85,7 +85,7 @@ return [
     |
     | Where block previews appear when hovering a block in the block picker:
     | `tooltip` shows them next to the hovered block, `panel` pins them next
-    | to the picker.
+    | to the picker. Both move below when there is no room on the right.
     |
     */
 
