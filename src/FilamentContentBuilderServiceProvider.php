@@ -44,6 +44,8 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
             groups: 'filament-content-builder-stubs'
         );
 
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+
         $this->loadTranslationsFrom(
             path: __DIR__.'/../lang',
             namespace: 'filament-content-builder-lang'

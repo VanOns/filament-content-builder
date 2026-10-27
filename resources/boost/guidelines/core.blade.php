@@ -119,6 +119,14 @@ Conventions:
 - For nesting, extend or model after `Blocks\Container` and use `ContentBlocksRenderer::make(...)->contentBlocks(fn () => FilamentContentBuilder::getContainerBlocks())`.
 - The `CanBeFixed` trait's `getFields()` is **deprecated** — for fixed blocks, wrap `Block::schema()` in a Filament container with `->statePath('data.hero-block')` (see README "Fixed blocks").
 
+## Block previews
+
+A block can have a preview image, shown when hovering the block in the block picker or a collapsed builder item. It lives at `resources/block-previews/{kebab-type}.svg` (same name as the block view, e.g. `HeroBlock` → `hero-block.svg`). WebP, PNG and JPG are supported for user-supplied screenshots, but always create previews as SVG. Built-in blocks ship their own; a file with the same name overrides it. Override `static preview(?string $variant = null): ?string` to use another path. Check with `$block::hasPreview()`. In the picker, previews are shown next to the hovered block; set `preview_position` to `panel` in the config to pin them next to the picker. They are only served to users who can access a Filament panel.
+
+Blocks whose fields switch between structurally different layouts (not just colors, sizes, mirroring or optional elements) can declare up to 3 variants in `static previewVariants(): array` (`key => label`), each with its own `{kebab-type}.{key}.svg`, and map an item's data to one in `static previewVariantFor(array $data): ?string`.
+
+**Suggest a preview**: after creating a block, or when changing a block's layout or fields, check whether its preview file(s) exist. If they don't (and the block doesn't override `preview()`), end your response by asking the user whether to create one with the `create-block-preview` skill. Don't create it unasked. When an existing preview no longer matches a changed layout, or a new field adds a structurally different layout, offer to update it or add a variant the same way.
+
 ## Templates
 
 Templates pair a Filament field-set with a Blade view selectable via `Template` field. Useful for picking a page layout where each layout has its own set of inputs.
@@ -152,7 +160,7 @@ public static function form(Form $form): Form
 | `getBuilderBlocks(?array $blocks = null)` | Convert classes to `Filament\Forms\Components\Builder\Block` instances. |
 | `blockExists(string $type)` | Whether a block type is registered. |
 | `getBlock(string $type, array $data)` | Hydrate a block instance (auto-increments `$blockIndex`). |
-| `getBlockClass(?string $type)` | Resolve `class-string<Block>` from a type. |
+| `getBlockClass(?string $type, ?array $blocks = null)` | Resolve `class-string<Block>` from a type, among the registered blocks or the given ones. |
 | `parseBlocks(array $blocks)` | Map stored blocks through each block's `parseData()`. |
 | `parseBlockInstances(array $blocks)` | Same, but returns hydrated `Block` instances. |
 

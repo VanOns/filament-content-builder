@@ -210,6 +210,49 @@ public static function hidden(?string $model): bool
 
 A hidden block is removed from the block picker. Blocks of that type that were already added are no longer shown in the builder, but they are kept when the record is saved.
 
+### Preview
+
+Blocks can have a preview image, shown when hovering the block in the block picker, and when hovering the label of a collapsed block in the builder. Place it at `resources/block-previews/<kebab-case-type>.svg`, e.g. `resources/block-previews/hero.svg` for a `Hero` block. WebP, PNG and JPG work too, e.g. `hero.png` for a screenshot; when several formats exist, the SVG is used. The preview is 320px wide, its height follows the SVG's `viewBox` or the image's size.
+
+The built-in blocks ship with a preview. Add a file with the same name, such as `text-block.svg`, to replace it. Override `preview()` to use a different path, or return `null` to disable the preview:
+
+```php
+public static function preview(?string $variant = null): ?string
+{
+    return resource_path('svg/hero-preview.svg');
+}
+```
+
+#### Variants
+
+When a field switches a block between layouts that look very different, give each layout its own preview. Declare the variants with their labels, and map a block's data to the matching variant:
+
+```php
+public static function previewVariants(): array
+{
+    return [
+        'split' => __('Title and media'),
+        'full' => __('Media only'),
+    ];
+}
+
+public static function previewVariantFor(array $data): ?string
+{
+    return ($data['full_width'] ?? false) ? 'full' : 'split';
+}
+```
+
+Each variant is read from `resources/block-previews/<kebab-case-type>.<variant>.svg` (or another supported format), e.g. `hero.split.svg`. The block picker shows all variants with their labels, a collapsed block shows the variant matching its data. Keep variants for real layout changes, such as a different arrangement of cards or columns; a different background color doesn't need its own preview.
+
+In the block picker, previews are shown next to the hovered block by default. Set `preview_position` to `panel` in the config to pin them next to the picker instead:
+
+```php
+// config/filament-content-builder.php
+'preview_position' => 'panel',
+```
+
+Previews are served by the package, so no publishing is needed. They are only served to users who can access a Filament panel. When using [Laravel Boost](https://github.com/laravel/boost), the `create-block-preview` skill lets your AI assistant draw previews based on your blocks' views and styling.
+
 ### Custom view
 
 Views are resolved from `resources/views/blocks/<kebab-case-type>.blade.php` by default. Override `view()` to change this:

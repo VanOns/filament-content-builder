@@ -70,16 +70,17 @@ class FilamentContentBuilder
     }
 
     /**
+     * @param array<Block|string>|null $blocks
      * @return class-string<Block>|null
      */
-    public static function getBlockClass(?string $name): ?string
+    public static function getBlockClass(?string $name, ?array $blocks = null): ?string
     {
         if (!$name) {
             return null;
         }
 
         /** @var ?string $class */
-        $class = collect(static::getBlocks())
+        $class = collect($blocks ?? static::getBlocks())
             ->first(fn (Block|string $block) => $block::type() === $name);
 
         return is_string($class) ? $class : null;
