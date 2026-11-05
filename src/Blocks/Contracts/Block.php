@@ -10,6 +10,7 @@ use ReflectionProperty;
 use RuntimeException;
 use VanOns\FilamentContentBuilder\Traits\CanBeFixed;
 use VanOns\FilamentContentBuilder\Traits\CanBeNested;
+use VanOns\FilamentContentBuilder\Traits\HasBlockActions;
 use VanOns\FilamentContentBuilder\Traits\HasDynamicLabel;
 use VanOns\FilamentContentBuilder\Traits\HasPreview;
 use VanOns\FilamentContentBuilder\Traits\HasSettings;
@@ -18,6 +19,7 @@ use VanOns\FilamentContentBuilder\Traits\HasVisibility;
 abstract class Block
 {
     use CanBeFixed;
+    use HasBlockActions;
     use HasDynamicLabel;
     use HasPreview;
     use CanBeNested;
