@@ -4,6 +4,8 @@ namespace VanOns\FilamentContentBuilder\Fields;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Field;
+use VanOns\FilamentContentBuilder\Actions\BlockFieldAction;
 use VanOns\FilamentContentBuilder\Actions\CopyBlockData;
 use VanOns\FilamentContentBuilder\Actions\PasteBlockAction;
 use VanOns\FilamentContentBuilder\FilamentContentBuilder;
@@ -41,6 +43,10 @@ class ContentBlocksRenderer extends Builder
 
         foreach ($this->getContentBlockClasses() as $block) {
             foreach ($block::blockActions() as $action) {
+                if ($action instanceof Field) {
+                    $action = BlockFieldAction::forField($action);
+                }
+
                 $actions[] = $this->prepareBlockAction($action, $block::type());
             }
         }

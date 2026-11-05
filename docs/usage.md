@@ -232,6 +232,38 @@ BlockAction::make('uppercaseTitle')
 
 The block's fields show the new values right away, including fields inside repeaters and rich editors. The values are hydrated like when the record is loaded, and validated when the record is saved. The action also has `getBlockData()`, `getBlockType()` and `getBlockClass()`.
 
+#### Fields
+
+Form fields can be mixed in with the actions, in any order. They're shown in the block's header and store their value in the block's data under their name:
+
+```php
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+
+public static function blockActions(): array
+{
+    return [
+        ...parent::blockActions(),
+        Toggle::make('full_width')
+            ->label(__('Full width')),
+        BlockAction::make('editButton')
+            // ...
+            ->storesInBlockData(),
+        Select::make('alignment')
+            ->hiddenLabel()
+            ->options([
+                'left' => __('Left'),
+                'center' => __('Center'),
+            ])
+            ->default('left'),
+    ];
+}
+```
+
+Header fields aren't part of the block's form, so keep them simple, such as toggles and selects. `default()`, `visible()`, `hidden()` and `live()` work, and `$get` reads the block's other fields. Validation rules and hooks such as `afterStateUpdated()` don't run. The same field can also be in the block's schema; both show the same value.
+
+Fields are registered like actions, as `<type>_<name>`, so give a block's fields and actions different names.
+
 #### Other actions
 
 Any Filament action works too. The block's key in the builder is available as `$arguments['item']`, and `$state` contains the builder's items, so `$state[$arguments['item']]` holds the block's `type` and `data`. `visible()` and `hidden()` work as usual.
