@@ -55,6 +55,7 @@ class ContentBlocksRenderer extends Builder
     }
 
     // Item actions are shared by all blocks, so each one gets a unique name and only shows for its own block.
+    // Its own hidden() and visible() are evaluated on the original after the type check, as Filament checks hidden() first.
     protected function prepareToolbarAction(Action $action, string $type): Action
     {
         $original = (clone $action)->schemaComponent($this);
@@ -63,6 +64,7 @@ class ContentBlocksRenderer extends Builder
         return $action
             ->name("{$type}_{$action->getName()}")
             ->label(fn (Action $action) => $resolve($action)->getLabel())
+            ->hidden(false)
             ->visible(function (Action $action, array $arguments, array $state) use ($resolve, $type): bool {
                 $item = $this->getBlockItemData($arguments, $state);
 

@@ -266,7 +266,7 @@ Fields are registered like actions, as `<type>_<name>`, so give a block's fields
 
 #### Other actions
 
-Any Filament action works too. The block's key in the builder is available as `$arguments['item']`, and `$state` contains the builder's items, so `$state[$arguments['item']]` holds the block's `type` and `data`. `visible()` and `hidden()` work as usual.
+Any Filament action works too. The block's key in the builder is available as `$arguments['item']`, and `$state` contains the builder's items, so `$state[$arguments['item']]` holds the block's `type` and `data`. `visible()` and `hidden()` work as usual, and only run for the action's own block.
 
 ### Visibility
 
