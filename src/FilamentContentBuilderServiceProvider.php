@@ -2,6 +2,8 @@
 
 namespace VanOns\FilamentContentBuilder;
 
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use VanOns\FilamentContentBuilder\Console\MakeContentBlockCommand;
@@ -66,6 +68,10 @@ class FilamentContentBuilderServiceProvider extends ServiceProvider
         }
 
         Blade::component('filament-content-builder::block', Block::class);
+
+        FilamentAsset::register([
+            Css::make('block-gallery', __DIR__ . '/../resources/css/block-gallery.css')->loadedOnRequest(),
+        ], 'van-ons/filament-content-builder');
     }
 
     public function register(): void
