@@ -7,7 +7,7 @@ use Filament\Forms\Components\Field;
 use Illuminate\Support\Arr;
 
 /**
- * Renders a field in the block's header, stored in the block's data under the field's name.
+ * Renders a field in the block's toolbar, stored in the block's data under the field's name.
  */
 class BlockFieldAction extends BlockAction
 {
@@ -58,7 +58,7 @@ class BlockFieldAction extends BlockAction
             $field->state($field->getDefaultState());
         }
 
-        // The header's list items shrink to the size of an icon button, so the field keeps its own width.
+        // The toolbar's list items shrink to the size of an icon button, so the field keeps its own width.
         return '<div style="width: max-content">' . $field->toHtml() . '</div>';
     }
 }

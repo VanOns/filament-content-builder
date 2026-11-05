@@ -24,7 +24,7 @@ class ContentBlocksRenderer extends Builder
         $this->blocks(fn () => $this->getContentBlocks())
             ->contentBlocks(FilamentContentBuilder::getBlocks())
             ->extraItemActions([
-                fn (): array => $this->getBlockActions(),
+                fn (): array => $this->getBlockToolbarActions(),
                 CopyBlockData::make()->hidden(! config('filament-content-builder.copy_paste', true)),
             ])
             ->hintActions([
@@ -37,17 +37,17 @@ class ContentBlocksRenderer extends Builder
     /**
      * @return array<Action>
      */
-    public function getBlockActions(): array
+    public function getBlockToolbarActions(): array
     {
         $actions = [];
 
         foreach ($this->getContentBlockClasses() as $block) {
-            foreach ($block::blockActions() as $action) {
+            foreach ($block::blockToolbar() as $action) {
                 if ($action instanceof Field) {
                     $action = BlockFieldAction::forField($action);
                 }
 
-                $actions[] = $this->prepareBlockAction($action, $block::type());
+                $actions[] = $this->prepareToolbarAction($action, $block::type());
             }
         }
 
@@ -55,7 +55,7 @@ class ContentBlocksRenderer extends Builder
     }
 
     // Item actions are shared by all blocks, so each one gets a unique name and only shows for its own block.
-    protected function prepareBlockAction(Action $action, string $type): Action
+    protected function prepareToolbarAction(Action $action, string $type): Action
     {
         $original = (clone $action)->schemaComponent($this);
         $resolve = fn (Action $action): Action => $original->arguments($action->getArguments());

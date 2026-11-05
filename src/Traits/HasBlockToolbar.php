@@ -6,12 +6,12 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use VanOns\FilamentContentBuilder\Actions\SettingsModalAction;
 
-trait HasBlockActions
+trait HasBlockToolbar
 {
     /**
      * @return array<Action|Field>
      */
-    public static function blockActions(): array
+    public static function blockToolbar(): array
     {
         return [
             SettingsModalAction::make(),
