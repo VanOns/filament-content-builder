@@ -185,6 +185,89 @@ public static function settingsPrefix(): string;
 public static function mutateSettingsData(array $data): array;
 ```
 
+### Toolbar
+
+Blocks can add their own buttons and fields to their toolbar, next to the settings button. Override `blockToolbar()` and return Filament actions. A `BlockAction` can read and store the block's data, for example from a modal form:
+
+```php
+use Filament\Forms\Components\TextInput;
+use VanOns\FilamentContentBuilder\Actions\BlockAction;
+
+public static function blockToolbar(): array
+{
+    return [
+        ...parent::blockToolbar(),
+        BlockAction::make('editButton')
+            ->label(__('Edit button'))
+            ->icon('heroicon-o-cursor-arrow-rays')
+            ->schema([
+                TextInput::make('button_label')
+                    ->label(__('Label')),
+            ])
+            ->storesInBlockData(),
+    ];
+}
+```
+
+`storesInBlockData()` fills the form with the block's data, and stores the form's fields in the block when it is submitted. The block's other data is kept.
+
+The settings button is the default entry, returned by `parent::blockToolbar()`. Leave it out to remove the settings button, or move it to change the order. The actions are shown as icon buttons in the given order, followed by the copy button.
+
+Builder actions are registered once on the field, so each action is registered as `<type>_<name>`, e.g. `Hero_editButton` or `Hero_settings`, and only shown for its own block. Use this name to call the action in tests.
+
+#### Block data
+
+In a `BlockAction`'s closures, `$blockData` holds the block's data, `$blockType` its type and `$blockClass` its class. Use `mergeBlockData()` to update some of the block's fields, or `setBlockData()` to replace all of its data:
+
+```php
+use Illuminate\Support\Str;
+
+BlockAction::make('uppercaseTitle')
+    ->icon('heroicon-o-arrow-up-circle')
+    ->hidden(fn (array $blockData): bool => blank($blockData['title'] ?? null))
+    ->action(fn (BlockAction $action, array $blockData) => $action->mergeBlockData([
+        'title' => Str::upper($blockData['title']),
+    ])),
+```
+
+The block's fields show the new values right away, including fields inside repeaters and rich editors. The values are hydrated like when the record is loaded, and validated when the record is saved. The action also has `getBlockData()`, `getBlockType()` and `getBlockClass()`.
+
+#### Fields
+
+Form fields can be mixed in with the actions, in any order. They're shown in the block's toolbar and store their value in the block's data under their name:
+
+```php
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+
+public static function blockToolbar(): array
+{
+    return [
+        ...parent::blockToolbar(),
+        Toggle::make('full_width')
+            ->label(__('Full width')),
+        BlockAction::make('editButton')
+            // ...
+            ->storesInBlockData(),
+        Select::make('alignment')
+            ->hiddenLabel()
+            ->options([
+                'left' => __('Left'),
+                'center' => __('Center'),
+            ])
+            ->default('left'),
+    ];
+}
+```
+
+Toolbar fields aren't part of the block's form, so keep them simple, such as toggles and selects. `default()`, `visible()`, `hidden()` and `live()` work, and `$get` reads the block's other fields. Validation rules and hooks such as `afterStateUpdated()` don't run. The same field can also be in the block's schema; both show the same value.
+
+Fields are registered like actions, as `<type>_<name>`, so give a block's fields and actions different names.
+
+#### Other actions
+
+Any Filament action works too. The block's key in the builder is available as `$arguments['item']`, and `$state` contains the builder's items, so `$state[$arguments['item']]` holds the block's `type` and `data`. `visible()` and `hidden()` work as usual, and only run for the action's own block.
+
 ### Visibility
 
 Control where a block can be picked by defining a static `visible()` and/or `hidden()` method. Both are optional and are evaluated like a Filament closure in the context of the builder field, so all of Filament's injections are available, such as `$get`, `$record`, `$model`, `$operation` and `$livewire`:
