@@ -208,7 +208,7 @@ public static function hidden(?string $model): bool
 
 `$get` resolves paths relative to the builder field, just like it does for a sibling field. The rules are evaluated on every render, so changing a field such as a template select updates the available blocks right away.
 
-A hidden block is removed from the block picker. Blocks of that type that were already added are no longer shown in the builder, but they are kept when the record is saved.
+A hidden block is removed from the block picker. Blocks of that type that were already added are no longer shown in the builder, and are removed when the record is saved. The same goes for blocks whose type no longer exists, for example after removing or renaming a block.
 
 ### Preview
 
