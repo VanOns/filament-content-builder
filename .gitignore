@@ -186,3 +186,6 @@ testbench.yaml
 
 # Code agent generated files
 /.claude
+
+# Nimbalyst generated files
+nimbalyst-local/
