@@ -97,6 +97,7 @@ class Hero extends Block
 | Allow nesting inside the built-in `Container` block | Add the class to `container-blocks` in config |
 | Show a preview when hovering the block in the picker or a collapsed item | Add `resources/block-previews/{kebab-type}.svg` (see `create-block-preview`), or override `static preview(?string $variant = null): ?string` |
 | Show a preview per structurally different layout | `static previewVariants(): array` + `static previewVariantFor(array $data): ?string`, one `{kebab-type}.{key}.svg` per variant |
+| Preselect a variant picked in the block gallery | `static previewVariantData(string $variant): array` |
 
 ### 4. Build the Blade view
 

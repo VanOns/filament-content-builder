@@ -7,10 +7,12 @@ use VanOns\FilamentContentBuilder\Actions\CopyBlockData;
 use VanOns\FilamentContentBuilder\Actions\PasteBlockAction;
 use VanOns\FilamentContentBuilder\Actions\SettingsModalAction;
 use VanOns\FilamentContentBuilder\FilamentContentBuilder;
+use VanOns\FilamentContentBuilder\Traits\HasBlockPicker;
 use VanOns\FilamentContentBuilder\Traits\HasContentBlocks;
 
 class ContentBlocksRenderer extends Builder
 {
+    use HasBlockPicker;
     use HasContentBlocks;
 
     protected function setUp(): void
