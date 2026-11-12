@@ -93,6 +93,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Block picker
+    |--------------------------------------------------------------------------
+    |
+    | How blocks are picked when adding one: `dropdown` shows Filament's block
+    | picker, `gallery` opens a gallery with every block's preview instead,
+    | and `both` adds a button to the dropdown that opens the gallery. In the
+    | gallery, blocks with multiple variants can be flipped through, and the
+    | picked variant is preselected. It can also be set per panel or field.
+    |
+    */
+
+    'block_picker' => 'dropdown',
+
+    /*
+    |--------------------------------------------------------------------------
     | Block usage
     |--------------------------------------------------------------------------
     |

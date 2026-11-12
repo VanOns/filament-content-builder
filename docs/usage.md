@@ -253,6 +253,42 @@ In the block picker, previews are shown next to the hovered block by default. Se
 
 Previews are served by the package, so no publishing is needed. They are only served to users who can access a Filament panel. When using [Laravel Boost](https://github.com/laravel/boost), the `create-block-preview` skill lets your AI assistant draw previews based on your blocks' views and styling.
 
+#### Block gallery
+
+Besides the block picker dropdown, blocks can be picked from a gallery that shows every block with its preview and label, with a search field on top. Blocks with variants get arrows to flip through their previews (the left and right arrow keys work too), and picking a card inserts the block with that variant preselected. Blocks without a preview show their icon. Choose how blocks are picked with `block_picker` in the config:
+
+- `dropdown` (default): Filament's block picker dropdown, with the hover previews.
+- `gallery`: the add buttons open the gallery instead of the dropdown.
+- `both`: the dropdown gets a "Browse all blocks" button that opens the gallery.
+
+```php
+// config/filament-content-builder.php
+'block_picker' => 'both',
+```
+
+Or per panel, or per builder field, with a string or the `BlockPicker` enum:
+
+```php
+use VanOns\FilamentContentBuilder\Enums\BlockPicker;
+
+FilamentContentBuilderPlugin::make()->blockPicker(BlockPicker::Both)
+
+ContentBlocksRenderer::make('content')->blockPicker(BlockPicker::Gallery)
+```
+
+The field's setting wins over the panel's, which wins over the config. Blocks picked from the gallery are inserted where it was opened, also between blocks. The gallery is not used when Filament's own `blockPreviews()` is enabled on the builder. Its stylesheet is a Filament asset, so run `php artisan filament:assets` (part of `filament:upgrade`) after updating the package.
+
+To preselect a variant, return the data that selects it from `previewVariantData()`. It's filled in after the block's defaults, so the other fields keep their default value. Nested defaults, such as those of repeater items, are not applied, so pass complete items:
+
+```php
+public static function previewVariantData(string $variant): array
+{
+    return ['full_width' => $variant === 'full'];
+}
+```
+
+The variant is only preselected when it was picked with the arrows; a card picked without flipping uses the block's defaults. Blocks without `previewVariantData()` still get the arrows to browse their variants, and are inserted with their defaults.
+
 ### Custom view
 
 Views are resolved from `resources/views/blocks/<kebab-case-type>.blade.php` by default. Override `view()` to change this:
