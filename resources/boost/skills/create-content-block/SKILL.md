@@ -90,6 +90,8 @@ class Hero extends Block
 | Use a non-default Blade view | `static view(): string` (default: `blocks.{kebab-type}` for app blocks, `filament-content-builder::blocks.{kebab-type}` for package blocks) |
 | Add a per-block settings modal (cog icon) | `static settingsSchema(): array`; access via `$block->getSettings()` in the view |
 | Mutate settings before save | `static mutateSettingsData(array $data): array` |
+| Add buttons or fields to the builder item's toolbar | `static blockToolbar(): array`, spreading `...parent::blockToolbar()` to keep the settings cog; fields such as `Toggle::make(...)` store their value in the block's data; entries are registered as `{type}_{name}` |
+| Edit the block's data from a toolbar button | `BlockAction`: `->schema([...])->storesInBlockData()` for a modal, or `$blockData` + `$action->mergeBlockData([...])` |
 | Only offer the block in some contexts (template, model, record, operation…) | Define `static visible(...): bool` and/or `static hidden(...): bool`; parameters are Filament closure injections (`Get $get`, `?Model $record`, `?string $model`, …) evaluated against the builder field |
 | Customize the settings storage key (default `settings`) | `static settingsPrefix(): string` |
 | Customize what stored data looks like (e.g. cast/transform) | `parseData(): array` |
