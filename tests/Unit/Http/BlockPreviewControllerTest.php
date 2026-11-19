@@ -17,7 +17,7 @@ afterEach(function () {
     @unlink($this->previewPath);
 });
 
-function preview(string $type, ?string $block = null): mixed
+function requestBlockPreview(string $type, ?string $block = null): mixed
 {
     return app(BlockPreviewController::class)(Request::create('/', 'GET', array_filter(['block' => $block])), $type);
 }
@@ -31,11 +31,11 @@ it('names the class in the preview url of a block that is not registered', funct
 });
 
 it('serves the preview of a block that is not registered', function () {
-    expect(preview('UnregisteredBlock', UnregisteredBlock::class)->getFile()->getPathname())->toBe($this->previewPath);
+    expect(requestBlockPreview('UnregisteredBlock', UnregisteredBlock::class)->getFile()->getPathname())->toBe($this->previewPath);
 });
 
 it('does not serve a preview for a class that is not a block or has another type', function (string $type, string $block) {
-    preview($type, $block);
+    requestBlockPreview($type, $block);
 })->with([
     'not a block' => ['UnregisteredBlock', stdClass::class],
     'another type' => ['OtherBlock', UnregisteredBlock::class],
