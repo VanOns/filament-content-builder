@@ -8,6 +8,7 @@ use Illuminate\Support\HtmlString;
 use Illuminate\Support\Js;
 use Illuminate\Support\Str;
 use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
+use VanOns\FilamentContentBuilder\FilamentContentBuilder;
 
 /**
  * @mixin Block
@@ -142,8 +143,18 @@ trait HasPreview
         return request()->getBaseUrl() . route('filament-content-builder.block-preview', array_filter([
             'type' => static::type(),
             'variant' => $variant,
+            'block' => static::isRegisteredBlock() ? null : static::class,
             'v' => substr((string) md5_file($path), 0, 12),
         ], fn (mixed $value) => $value !== null), absolute: false);
+    }
+
+    /**
+     * Whether the preview route can find this block by its type, which it can't for blocks that are only given to a
+     * builder (e.g. with `contentBlocks()`).
+     */
+    protected static function isRegisteredBlock(): bool
+    {
+        return FilamentContentBuilder::getRegisteredBlockClass(static::type()) === static::class;
     }
 
     protected static function pickerLabel(string $label): string|Htmlable
