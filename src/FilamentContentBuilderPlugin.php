@@ -9,6 +9,7 @@ use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 use Illuminate\Support\Facades\Gate;
 use UnitEnum;
+use VanOns\FilamentContentBuilder\Enums\BlockPicker;
 use VanOns\FilamentContentBuilder\Pages\BlockUsage;
 
 class FilamentContentBuilderPlugin implements Plugin
@@ -20,6 +21,8 @@ class FilamentContentBuilderPlugin implements Plugin
     protected ?Closure $blockUsageAuthorization = null;
 
     protected string | UnitEnum | null $blockUsageNavigationGroup = null;
+
+    protected BlockPicker | string | Closure | null $blockPicker = null;
 
     public static function make(): static
     {
@@ -56,6 +59,17 @@ class FilamentContentBuilderPlugin implements Plugin
         return $this;
     }
 
+    /**
+     * Set how blocks are picked in builders of this panel. Defaults to the
+     * `block_picker` config value.
+     */
+    public function blockPicker(BlockPicker | string | Closure $picker): static
+    {
+        $this->blockPicker = $picker;
+
+        return $this;
+    }
+
     public function register(Panel $panel): void
     {
         if ($this->isBlockUsageEnabled()) {
@@ -72,6 +86,11 @@ class FilamentContentBuilderPlugin implements Plugin
     public function isBlockUsageEnabled(): bool
     {
         return (bool) $this->evaluate($this->blockUsage ?? config('filament-content-builder.usage.enabled', false));
+    }
+
+    public function getBlockPicker(): BlockPicker
+    {
+        return BlockPicker::resolve($this->evaluate($this->blockPicker ?? config('filament-content-builder.block_picker')));
     }
 
     public function isBlockUsageAuthorized(): bool

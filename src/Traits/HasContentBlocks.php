@@ -4,6 +4,7 @@ namespace VanOns\FilamentContentBuilder\Traits;
 
 use Closure;
 use Filament\Forms\Components\Builder;
+use VanOns\FilamentContentBuilder\Blocks\Contracts\Block;
 use VanOns\FilamentContentBuilder\FilamentContentBuilder;
 
 /**
@@ -23,7 +24,15 @@ trait HasContentBlocks
     public function getContentBlocks(): array
     {
         return FilamentContentBuilder::getBuilderBlocks(
-            $this->evaluate($this->contentBlocks)
+            $this->getContentBlockClasses()
         );
+    }
+
+    /**
+     * @return array<class-string<Block>|Block>
+     */
+    public function getContentBlockClasses(): array
+    {
+        return $this->evaluate($this->contentBlocks);
     }
 }

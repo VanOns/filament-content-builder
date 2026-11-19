@@ -77,6 +77,8 @@ public static function previewVariantFor(array $data): ?string
 
 `$data` is the builder item's raw state (settings under `$data['settings']`). Mirror the condition the front-end uses to pick the layout.
 
+When the block gallery is enabled (`'block_picker' => 'gallery'` or `'both'`), picking a variant there fills the data from `static previewVariantData(string $variant): array` over the block's defaults, e.g. `['full_width' => $variant === 'full']`. Add it so the picked variant is preselected; nested items such as repeater rows need complete data.
+
 ### 4. Draw the SVG
 
 Rules:

@@ -52,6 +52,16 @@ trait HasPreview
     }
 
     /**
+     * Data that preselects the variant when it's picked in the block gallery.
+     *
+     * @return array<string, mixed>
+     */
+    public static function previewVariantData(string $variant): array
+    {
+        return [];
+    }
+
+    /**
      * Absolute path to the preview image.
      */
     public static function preview(?string $variant = null): ?string
