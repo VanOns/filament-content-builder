@@ -70,6 +70,16 @@ class FilamentContentBuilder
     }
 
     /**
+     * The block or container block registered in the config with this type.
+     *
+     * @return class-string<Block>|null
+     */
+    public static function getRegisteredBlockClass(?string $name): ?string
+    {
+        return static::getBlockClass($name) ?? static::getBlockClass($name, static::getContainerBlocks());
+    }
+
+    /**
      * @param array<Block|string>|null $blocks
      * @return class-string<Block>|null
      */
