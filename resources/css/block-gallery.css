@@ -241,6 +241,11 @@
     pointer-events: none;
 }
 
+/* Places the blocks, and so the link, below the picker's "no results" message. */
+.fi-dropdown-list > :has(.fcb-block-picker-gallery-link) {
+    order: 1;
+}
+
 .fi-dropdown-list-item:has(.fcb-block-picker-gallery-link):where(.dark, .dark *) {
     border-top-color: color-mix(in oklab, #fff 5%, transparent);
 }
